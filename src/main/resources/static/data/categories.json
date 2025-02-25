@@ -1,0 +1,13 @@
+[{
+    "id":1,
+    "name":"Phòng trọ",
+    "tag": "phongtro"
+},{
+    "id":2,
+    "name":"Nguyên căn",
+    "tag": "nguyencan"
+},{
+    "id":3,
+    "name":"Mặt bằng",
+    "tag": "matbang"
+}]

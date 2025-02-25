@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/html" xmlns:margin-left="http://www.w3.org/1999/xhtml">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+            integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" th:href="@{/css/details.css}">
+</head>
+<body data-spy="scroll" data-target=".nav" data-offset="1">
+<header>
+    <div style="background-color: white;" class="flex border top">
+        <div class="container">
+            <div class="header flex">
+                <div class="web icon">
+                    <a th:href="@{/api/home}"><img style="width: 50%; height: 50%;"
+                                                   src="https://res.cloudinary.com/hoaptit/image/upload/v1730187948/tro-sinh-vien2_wiuzca.png"
+                                                   alt=""></a>
+                </div>
+                <div class="right header flex">
+                    <div th:if="${username != null}" class="big-device flex">
+                        <div><a class="btn italic" th:href="@{/user/profile}"><h4 th:text="${username}"></h4></a></div>
+                        <div><a class="btn header-btn" th:href="@{/user/logout}">Đăng xuất</a></div>
+                        <div th:if="${role == 'Landlord'}"><a class="btn header-btn" href="/api/room/addroom">Đăng
+                            tin</a></div>
+                    </div>
+                    <div th:if="${username == null}" class="big-device flex">
+                        <div><a class="btn header-btn" th:href="@{/user/login}">Đăng nhập</a></div>
+                        <div><a class="btn header-btn" th:href="@{/user/register}">Đăng ký</a></div>
+
+                    </div>
+                    <div class="small-device flex">
+                        <div><a href="@{/user/login}" type="button" style="padding: 3px;" class="fa fa-sign-in"></a>
+                        </div>
+                        <div><a href="@{/user/register}" type="button" style="padding: 3px;"
+                                class="fa-solid fa-user-plus"></a></div>
+                        <div><a href="#" type="button" style="padding: 3px;" class="fa-solid fa-plus"></a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</header>
+<div class="toggle">
+    <i class="fas fa-bars"></i>
+</div>
+<nav>
+    <div>
+        <div class="container">
+            <ul class="menu flex" id="menu">
+                <li><a class="active" th:href="@{/api/home}">Trang chủ</a></li>
+                <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
+                <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
+                <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
+                <li th:if="${role == 'Tenant'}"><a th:href="@{/room/favorites}">Phòng yêu thích</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <section>
+        <div style="margin-top: 10px;" class="content">
+            <div class="left border">
+
+                <h3 class="subject">Phòng trọ sinh viên khu vực Hà Đông</h3>
+                <a style="text-align: right" th:href="@{'/room/'+ ${room.getRoom_id()} +'/save'}">Thêm vào yêu thích</a>
+                <div th:if="${error == 'true'}" class="alert alert-success"
+                     style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;">
+                    Chỉ thêm phòng trọ tối đa 1 lần!
+                </div>
+                <div th:if="${error == 'false'}" class="alert alert-success"
+                     style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;">
+                    Đã thêm phòng trọ thành công!
+                </div>
+                <div class="items" id="phongtro">
+                    <div class="item">
+                        <!-- Carousel -->
+                        <div id="roomCarousel" class="carousel">
+                            <div class="carousel-inner">
+                                <div th:each="image, iterStat : ${images}"
+                                     th:classappend="${iterStat.index == 0} ? 'carousel-item active' : 'carousel-item'">
+                                    <img th:src="@{${image}}" class="carousel-image" alt="Room Image">
+                                </div>
+                            </div>
+                            <!-- Thanh điều khiển bên trái và bên phải -->
+                            <div class="carousel-control-bar prev" onclick="prevSlide()"></div>
+                            <div class="carousel-control-bar next" onclick="nextSlide()"></div>
+                        </div>
+                        <!-- Thông tin chi tiết của phòng -->
+                        <div class="info" style="font-size: 20px; background-color: white">
+                            <br>
+                            <form th:action="@{/api/room/schedule}" method="get">
+                                <input type="text" hidden="hidden" th:value="${room.getRoom_id()}" name="room_id">
+                                <div class="main-info">
+                                    <div>
+                                        <p th:text="'Giá: ' + ${room.getPrice()} + ' triệu/tháng - ' + ${room.getRoomType()}"></p>
+                                    </div>
+                                    <div><p th:text="'Diện tích: ' + ${room.getArea()} + 'm2'"></p></div>
+                                    <div><p th:text="'Địa chỉ: ' + ${room.getAddress()}"></p></div>
+                                </div>
+                                <div><p th:text="'Mô tả: ' + ${room.getDescription()}"></p></div>
+                                <div class="button-container">
+                                    <input type="submit" value="Đặt lịch hẹn" class="schedule-button">
+                                </div>
+                            </form>
+                            <!-- Icon liên hệ -->
+                            <div class="contact-icons" style="float: right">
+                                <span>Liên lạc</span>
+                                <a th:href="@{'https://zalo.me/' + ${userDto.getTel()}}" target="_blank"
+                                   class="contact-icon">
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/9/91/Icon_of_Zalo.svg/1200px-Icon_of_Zalo.svg.png"
+                                         alt="Zalo" class="icon-image">
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="comments">
+                    <h4 class="comments-title">Bình luận</h4>
+                    <div class="comments-list">
+                        <div th:each="comment : ${comments}" class="comment-item">
+                            <div class="comment-avatar">
+                                <img th:src="@{${comment.getAvatar()}}" alt="User Avatar" class="avatar-img">
+                            </div>
+                            <div class="comment-body">
+                                <div class="comment-header">
+                                    <strong class="comment-user" th:text="${comment.getUsername()}"></strong>
+
+                                    <!-- Thời gian bình luận ở góc phải -->
+                                    <div class="comment-actions">
+                                        <span class="comment-time"
+                                              th:data-comment-time="${comment.getCommentTime()}"
+                                              th:text="'Đang tải...'"></span>
+
+                                        <!-- Nút "..." chỉ hiện khi là chủ trọ hoặc chủ comment -->
+                                        <div class="dropdown" th:if="${usernameLandlord == username || username == comment.getUsername()}">
+                                            <button class="dropdown-toggle">...</button>
+                                            <div class="dropdown-menu">
+                                                <!-- Hiện "Xóa" cho chủ trọ hoặc chủ comment -->
+                                                <a th:if="${usernameLandlord == username || username == comment.getUsername()}"
+                                                   th:href="@{'/api/comment/remove?commentId='+${comment.getId()} +'&roomId='+${room.getRoom_id()}}">Xóa</a>
+                                                <!-- Hiện "Chỉnh sửa" chỉ khi là chủ comment -->
+                                                <a th:href="@{'/api/comment/confirmEdit?commentId='+${comment.getId()} +'&roomId='+${room.getRoom_id()}}" th:if="${username == comment.getUsername()}">Chỉnh sửa</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:if="${commentId == comment.getId()}">
+                                    <form method="post" th:action="@{'/api/comment/edit?commentId='+${comment.getId()}+'&roomId='+${room.getRoom_id()}}">
+                                        <input class="comment-content" name="content" th:value="${comment.getContent()}" type="text" required>
+                                        <input type="submit">
+                                    </form>
+                                </div>
+                                <div th:if="${commentId != comment.getId()}">
+                                    <p class="comment-content" th:text="${comment.getContent()}"></p>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- Ô nhập bình luận -->
+                    <div class="comment-form">
+                        <form th:action="@{/api/comment/add}" method="post" class="form-container">
+                            <input type="text" hidden="hidden" th:value="${room.getRoom_id()}" name="room_id">
+                            <input type="text" hidden="hidden" th:if="${username != null}" th:value="${username}"
+                                   name="username">
+                            <input type="text" hidden="hidden" id="commentTime" name="commentTime">
+                            <textarea name="content" placeholder="Viết bình luận..." class="comment-textarea"
+                                      required></textarea>
+                            <button type="submit" class="submit-comment-button" onclick="setCommentTime()">Gửi</button>
+                        </form>
+                    </div>
+                </div>
+
+
+                <!-- Kết thúc phần báo cáo và bình luận -->
+            </div>
+
+            <div class="right border bg-white">
+                <h3 class="subject">Tin mới đăng</h3>
+                <ul class="flex v-menu">
+                    <li><a th:href="@{/api/home/news_1}">Những lưu ý khi thuê trọ</a></li>
+                    <li><a th:href="@{/api/home/news_2}">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>
+                    <li><a th:href="@{/api/home/nenthuenhaodau}">Nên thuê nhà ở đâu</a></li>
+                    <li><a th:href="@{/api/home/nhadephon}">Làm sao để nhà đẹp hơn</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+
+</div>
+</body>
+<script>
+    let currentIndex = 0;
+    const items = document.querySelectorAll('.carousel-item');
+
+    function showSlide(index) {
+        items.forEach((item, i) => {
+            item.classList.remove('active');
+            if (i === index) {
+                item.classList.add('active');
+            }
+        });
+    }
+
+    function nextSlide() {
+        currentIndex = (currentIndex + 1) % items.length;
+        showSlide(currentIndex);
+    }
+
+    function prevSlide() {
+        currentIndex = (currentIndex - 1 + items.length) % items.length;
+        showSlide(currentIndex);
+    }
+
+    // Tự động chuyển ảnh sau mỗi 8 giây
+    setInterval(nextSlide, 8000);
+
+    function setCommentTime() {
+        const commentDateInput = document.getElementById('commentTime');
+        const now = new Date();
+
+        // Lấy các thành phần của ngày giờ
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const date = String(now.getDate()).padStart(2, '0');
+        const hours = String(now.getHours()).padStart(2, '0');
+        const minutes = String(now.getMinutes()).padStart(2, '0');
+        const seconds = String(now.getSeconds()).padStart(2, '0');
+
+        // Định dạng theo kiểu "yyyy-MM-dd HH:mm:ss"
+        const formattedDate = `${year}-${month}-${date} ${hours}:${minutes}:${seconds}`;
+
+        // Gán giá trị vào input hidden
+        commentDateInput.value = formattedDate;
+    }
+
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/customParseFormat.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/plugin/relativeTime.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/vi.min.js"></script>
+<script>
+    // Tích hợp các plugin và đặt ngôn ngữ mặc định là tiếng Việt
+    dayjs.extend(dayjs_plugin_customParseFormat); // Plugin cho định dạng tùy chỉnh
+    dayjs.extend(dayjs_plugin_relativeTime); // Plugin để tính thời gian tương đối
+    dayjs.locale('vi'); // Đặt ngôn ngữ là tiếng Việt
+
+    document.addEventListener("DOMContentLoaded", function () {
+        const timeElements = document.querySelectorAll('.comment-time');
+
+        timeElements.forEach(el => {
+            const commentTime = el.getAttribute('data-comment-time'); // Lấy thời gian từ data-comment-time
+            if (commentTime) {
+                try {
+                    // Sử dụng định dạng "yyyy-MM-dd HH:mm:ss" để phân tích chuỗi thời gian
+                    const parsedTime = dayjs(commentTime, "YYYY-MM-DD HH:mm:ss");
+
+                    if (parsedTime.isValid()) {
+                        // Hiển thị thời gian tương đối bằng tiếng Việt
+                        const relativeTime = parsedTime.fromNow();
+                        el.textContent = relativeTime;
+                    } else {
+                        el.textContent = "Thời gian không hợp lệ"; // Xử lý nếu thời gian không hợp lệ
+                    }
+                } catch (error) {
+                    el.textContent = "Lỗi định dạng thời gian"; // Xử lý lỗi ngoại lệ
+                }
+            } else {
+                el.textContent = "Không có thời gian"; // Nếu không có giá trị
+            }
+        });
+    });
+    // Tự động ẩn thông báo thành công sau 3 giây
+    setTimeout(function () {
+        var successAlert = document.querySelector('.alert-success');
+        if (successAlert) {
+            successAlert.style.display = 'none';
+        }
+    }, 4000);
+</script>
+
+</html>

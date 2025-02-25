@@ -1,0 +1,753 @@
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+hr {
+    margin-left: auto;
+    margin-right: auto;
+    width: 90%;
+    border-width: 1px;
+}
+
+a {
+    text-decoration: none !important;
+}
+
+.subject {
+    text-align: center;
+    text-transform: uppercase;
+}
+
+.left {
+    background-color: white;
+    border: 1px solid;
+    width: 70%;
+    height: 100%;
+    margin-bottom: 20px;
+}
+
+.right {
+    /* background-color: white; */
+    /* border: 1px solid; */
+    width: 28%;
+    height: 100%;
+}
+
+.bg-white {
+    background-color: white;
+}
+
+.right-no-border {
+    width: 28%;
+    height: 100%;
+}
+
+.content {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
+}
+
+
+.flex {
+    display: flex;
+    align-items: center;
+}
+
+.header {
+    justify-content: space-between;
+}
+
+
+.rightheader div {
+    padding: 10px;
+}
+
+.webicon {
+    width: 11%;
+    padding: 10px;
+}
+
+.container {
+    width: 80%;
+    align-items: center;
+    margin: 0 auto;
+}
+
+.detail-container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+body {
+    justify-content: center;
+    position: relative;
+    align-items: center;
+
+}
+
+.border {
+    border: 0.5px solid gray;
+    border-radius: 7px;
+}
+
+.bordertop {
+    border-top: 0;
+    border: 0.5px solid gray;
+    border-radius: 7px 7px 0 0;
+}
+
+.borderbottom {
+    border: 0.5px solid gray;
+    border-radius: 0 0 7px 7px;
+}
+
+nav {
+    background-color: #1266dd;
+}
+
+
+nav ul.menu {
+    display: flex;
+    overflow: hidden;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+}
+
+nav ul.menu > li > a {
+
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+nav ul.menu > li:hover a {
+    border-bottom: 5px solid lightblue;
+    transition: all 0.1s;
+}
+
+nav ul.menu > li > a.active {
+    border-bottom: 5px solid lightblue;
+}
+
+@media screen and (max-width: 873px) {
+    .menu {
+        flex-direction: column;
+    }
+
+    .container {
+        width: 95%;
+    }
+
+    .content {
+        display: block;
+    }
+
+    .right {
+        width: 100%;
+    }
+
+    .left {
+        width: 100%;
+    }
+
+    .toggle {
+        display: block !important;
+    }
+
+    nav {
+        display: none;
+    }
+
+    div.big-device {
+        display: none;
+    }
+
+    div.small-device {
+        display: flex !important;
+    }
+
+    .main-info {
+        display: block;
+    }
+
+    .sticky {
+        position: absolute !important;
+        top: 0;
+        width: 100%
+    }
+
+    .item {
+        display: block !important;
+    }
+
+    .image {
+        width: 100% !important;
+        margin: 0 !important;
+    }
+
+    .info {
+        width: 100% !important;
+    }
+}
+
+
+div.small-device {
+    display: none;
+}
+
+.toggle {
+    display: none;
+    background-color: #0f305f;
+    color: white;
+    text-align: right;
+    padding: 10px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.sticky {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+.smaller {
+    padding: 8px 16px !important;
+}
+
+@keyframes move {
+    from {
+        left: 0;
+    }
+
+    to {
+        left: 100%;
+    }
+}
+
+.v-menu {
+    flex-direction: column;
+    overflow: hidden;
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+
+}
+
+.v-menu > li {
+    width: 90%;
+    border-top: 1px solid lightgray;
+}
+
+.v-menu > li > a {
+    float: left;
+    display: block;
+    color: black;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+    font-size: 17px;
+}
+
+.v-menu > li > a:hover {
+    color: red;
+}
+
+footer {
+    margin-top: 10px;
+    overflow: hidden;
+    background-color: white;
+    padding: 0.5rem;
+    color: black;
+}
+
+footer > span.moving {
+    position: relative;
+    animation: move 10s infinite;
+}
+
+/*.item {*/
+/*    display: flex;*/
+/*    border-top: 1px solid gray;*/
+/*}*/
+
+
+.image > img {
+    border-radius: 7px;
+}
+
+.border-image {
+    border-radius: 7px;
+}
+
+.item {
+    display: flex;
+    flex-direction: column;
+}
+
+.image {
+    width: 100%;
+    height: 300px; /* Điều chỉnh chiều cao tùy theo nhu cầu */
+    object-fit: cover;
+    position: relative; /* Để đặt các phần tử khác lên trên ảnh */
+}
+
+.info {
+    width: 100%;
+    padding: 20px; /* Tăng padding để tạo khoảng cách giữa ảnh và nội dung */
+    background-color: #f0f0f0; /* Thêm màu nền cho phần thông tin */
+}
+
+.main-title {
+    width: 100%;
+    /* padding: 10px; */
+    font-size: 150%;
+}
+
+.main-info {
+    width: 100%;
+    justify-content: space-between;
+    /* padding: 10px; */
+}
+
+.info > div {
+    padding: 10px;
+}
+
+.detail-title {
+    font-size: 200%;
+    text-transform: capitalize;
+}
+
+.comment-form {
+    width: 90%;
+    margin: 0 auto;
+    padding: 5px 0px;
+    font-size: 120%;
+    background-color: cornsilk;
+    border-radius: 7px;
+}
+
+input[type="text"],
+input[type="email"],
+textarea {
+    outline: none;
+    padding: 5px 0;
+    width: 100%;
+}
+.comment-info table {
+    /* background-color: #f3f3f3; */
+    padding: 20px 30px 15px;
+    width: 100%;
+}
+
+.comment-info table th {
+    font-weight: 600;
+    padding-bottom: 20px;
+    text-align: left;
+    text-transform: uppercase;
+    width: 25%;
+}
+
+.comment-info table td {
+    padding-bottom: 20px;
+}
+
+.comment-info p {
+    text-align: center;
+}
+
+.comment-info p button {
+    background-color: #666;
+    border: none;
+    border-radius: 4px;
+    color: #fff;
+    height: 36px;
+    text-align: center;
+    width: 100px;
+}
+
+@media only screen and (max-width: 873px) {
+    .comment-info {
+        max-width: 90%;
+        width: auto;
+    }
+
+    .comment-info table th,
+    .comment-info table td {
+        display: block;
+    }
+
+    .comment-info p button {
+        width: 50%;
+        min-width: 200px;
+    }
+}
+
+.user-img {
+    margin-top: 10px;
+}
+
+.ml-10 {
+    margin-left: 10px;
+}
+
+.rounded-circle {
+    border-radius: 100px;
+}
+
+.mt-10 {
+    margin-top: 10px;
+}
+
+.header-btn {
+    color: white;
+    text-decoration: none;
+    background-color: #1266dd;
+}
+
+
+.price {
+    color: green;
+    font-size: 25px;
+}
+
+.mr-5 {
+    margin-right: 5px;
+}
+
+.test {
+    background-color: red;
+}
+
+.wrap-login-btn {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding-top: 5px;
+    padding-bottom: 10px;
+}
+
+.login-btn {
+    font-family: Montserrat-Bold;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #fff;
+    text-transform: uppercase;
+    width: 80%;
+    height: 40px;
+    border-radius: 7px;
+    background: #57b846;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 0 25px;
+}
+
+button {
+    outline: none !important;
+    border: none;
+    background: transparent;
+}
+
+
+.thump {
+    width: 15%;
+}
+
+.main {
+    width: 80%;
+}
+
+/* Định dạng Carousel */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Định dạng Carousel */
+.carousel {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+}
+
+.carousel-inner {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.carousel-item {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 1s ease-in-out;
+}
+
+.carousel-item.active {
+    opacity: 1;
+}
+
+.carousel-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Thanh điều khiển bên trái và bên phải */
+.carousel-control-bar {
+    position: absolute;
+    top: 0;
+    width: 10%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.carousel-control-bar:hover {
+    background-color: rgba(0, 0, 0, 0.4);
+}
+
+.carousel-control-bar.prev {
+    left: 0;
+}
+
+.carousel-control-bar.next {
+    right: 0;
+}
+
+/* Căn giữa nút trong button-container */
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px; /* Khoảng cách phía trên nút */
+}
+
+.schedule-button {
+    border-color: blue;
+    background-color: blue;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+}
+
+/* Định dạng cho các icon liên hệ */
+.contact-icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-top: 15px;
+}
+
+.contact-icon {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    color: inherit;
+    font-size: 16px;
+}
+
+.icon-image {
+    width: 24px;
+    height: 24px;
+    margin-right: 8px;
+}
+
+/* Bình luận */
+/* Tổng thể phần bình luận */
+.reports-comments-section {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+/* Tiêu đề phần bình luận */
+.comments-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+/* Danh sách bình luận */
+.comments-list {
+    margin-bottom: 20px;
+}
+
+/* Mỗi bình luận */
+.comment-item {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px 0;
+    border-bottom: 1px solid #e0e0e0;
+    gap: 10px;
+}
+
+/* Ảnh đại diện */
+.comment-avatar {
+    flex-shrink: 0;
+}
+
+.avatar-img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+/* Nội dung bình luận */
+.comment-body {
+    flex: 1;
+}
+
+.comment-user {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333;
+}
+
+.comment-time {
+    font-size: 12px;
+    color: #888;
+}
+
+/* Nội dung bình luận */
+.comment-content {
+    font-size: 14px;
+    color: #444;
+}
+
+/* Form thêm bình luận */
+.comment-form .form-container {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.comment-textarea {
+    flex: 1;
+    min-height: 40px;
+    padding: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 20px;
+    font-size: 14px;
+    resize: none;
+    background-color: #f5f5f5;
+}
+
+.submit-comment-button {
+    padding: 8px 16px;
+    background-color: #1877f2;
+    color: white;
+    border: none;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.submit-comment-button:hover {
+    background-color: #155cb0;
+}
+/*    */
+.comment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: relative;
+}
+
+.comment-actions {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    position: relative;
+}
+
+.comment-time {
+    color: gray;
+    font-size: 12px;
+}
+
+.dropdown {
+    position: relative;
+}
+
+.dropdown-toggle {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    padding: 4px;
+}
+
+.dropdown-menu {
+    display: none;
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+    min-width: 100px;
+}
+
+.dropdown-menu a {
+    display: block;
+    padding: 8px 12px;
+    text-decoration: none;
+    color: black;
+}
+
+.dropdown-menu a:hover {
+    background-color: #f1f1f1;
+}
+
+.dropdown:hover .dropdown-menu {
+    display: block;
+}
