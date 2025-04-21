@@ -27,6 +27,12 @@ public class Room extends BaseEntity {
     @Min(1)
     private double price;
 
+    @Min(1)
+    private double waterPrice;
+
+    @Min(1)
+    private double electricityPrice;
+
     @Size(max = 5000)
     private String description;
 
@@ -39,4 +45,12 @@ public class Room extends BaseEntity {
     private String isApproval;
 
     private String image;
+
+    private long viewNumber;
+
+    @Builder.Default
+    private boolean vipStatus = false;
+
+    @Builder.Default
+    private int vipDateNumber = 0;
 }

@@ -44,6 +44,8 @@
     }
 
     .right {
+        /* background-color: white; */
+        /* border: 1px solid; */
         width: 28%;
         height: 100%;
     }
@@ -78,28 +80,25 @@
         padding: 10px;
     }
 
-    .webicon {
-        width: 11%;
-        padding: 10px;
+    .filter-item button {
+        padding: 10px 20px;
+        background-color: #003c9d; /* Màu nền xanh dương đậm */
+        color: white;
+        border: none;
+        border-radius: 8px; /* Bo góc */
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
     }
 
-    .container {
-        width: 95%;
-        align-items: center;
-        margin: 0 auto;
-    }
-
-    .detail-container {
-        width: 90%;
-        margin: 0 auto;
+    .filter-item button:hover {
+        background-color: #002e7a; /* Màu nền khi hover */
     }
 
     body {
         justify-content: center;
         position: relative;
         align-items: center;
-
-
     }
 
     .border {
@@ -107,23 +106,10 @@
         border-radius: 7px;
     }
 
-    .bordertop {
-        border-top: 0;
-        border: 0.5px solid gray;
-        border-radius: 7px 7px 0 0;
-    }
-
-    .border bottom {
-        border: 0.5px solid gray;
-        border-radius: 0 0 7px 7px;
-    }
-
     nav {
+        width: 100vw;
         background-color: #1266dd;
     }
-
-
-
 
     nav ul.menu {
         display: flex;
@@ -131,6 +117,8 @@
         list-style-type: none;
         padding: 0;
         margin: 0;
+        float: left;
+
 
     }
 
@@ -188,26 +176,6 @@
 
         div.small-device {
             display: flex !important;
-        }
-
-        .main-info {
-            display: block;
-        }
-
-        .sticky {
-            position: absolute !important;
-            top: 0;
-            width: 100%
-        }
-        .item{
-            display: block !important;
-        }
-        .image{
-            width: 100% !important;
-            margin: 0 !important;
-        }
-        .info{
-            width: 100% !important;
         }
     }
 
@@ -292,52 +260,13 @@
         border-top: 1px solid gray;
     }
 
-    .image {
-        width: 30%;
-        margin: auto 10px;
-        padding: 5px;
-    }
-
     .image>img {
         border-radius: 7px;
     }
 
-    .border-image{
-        border-radius: 7px;
-    }
-
-    .info {
-        width: 70%;
-    }
-
-    .main-title {
-        width: 100%;
-        /* padding: 10px; */
-        font-size: 150%;
-    }
-
-    .main-info {
-        width: 100%;
-        justify-content: space-between;
-        /* padding: 10px; */
-    }
 
     .info>div {
         padding: 10px;
-    }
-
-    .detail-title {
-        font-size: 200%;
-        text-transform: capitalize;
-    }
-
-    .comment-form {
-        width: 90%;
-        margin: 0 auto;
-        padding: 5px 0px;
-        font-size: 120%;
-        background-color: lightgray;
-        border-radius: 7px;
     }
 
     input[type="text"],
@@ -347,11 +276,6 @@
         padding: 5px 0;
         width: 100%;
     }
-
-    /* .comment-info {
-        width: 90%;
-        margin: 0px auto;
-    } */
 
     .comment-info table {
         /* background-color: #f3f3f3; */
@@ -401,192 +325,97 @@
             min-width: 200px;
         }
     }
-
-    .user-img {
-        margin-top: 10px;
-    }
-
-    .ml-10{
-        margin-left: 10px;
-    }
-
-    .rounded-circle {
-        border-radius: 100px;
-    }
-
-    .mt-10 {
-        margin-top: 10px;
-    }
-
     .header-btn {
         color: white;
         text-decoration: none;
         background-color: #1266dd;
-    }
-
-
-    .price{
-        color: green;
-        font-size: 25px;
-    }
-
-    .mr-5{
-        margin-right: 5px;
-    }
-
-    .test{
-        background-color: red;
-    }
-
-    .wrap-login-btn {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding-top: 5px;
-        padding-bottom: 10px;
-    }
-
-    .login-btn {
-        font-family: Montserrat-Bold;
-        font-size: 15px;
-        line-height: 1.5;
-        color: #fff;
-        text-transform: uppercase;
-        width: 80%;
-        height: 40px;
-        border-radius: 7px;
-        background: #57b846;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0 25px;
     }
     button {
         outline: none !important;
         border: none;
         background: transparent;
     }
-
-
-    .thump {
-        width: 15%;
+    body {
+        font-family: Arial, sans-serif;
+        background-color: white;
+        color: #333;
+        margin: 0;
+        padding: 0;
     }
-
-    .main  {
+    .container {
         width: 80%;
+        margin: auto;
+        overflow: hidden;
     }
-
-/*    Nut bam*/
-    /* Nút Đã duyệt và Chờ xác nhận */
-    .status-btn {
-        display: inline-block;
-        padding: 10px 20px;
-        font-size: 16px;
-        font-weight: bold;
+    .back-button i {
+        margin-right: 8px;
+        font-size: 2em;
+    }
+    h1 {
+        text-align: center;
+        padding: 20px;
+    }
+    .filter-bar input[type="text"],
+    .filter-bar select {
+        padding: 10px;
+        width: 180px;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+    .filter-bar button {
+        padding: 10px 15px;
         border: none;
-        border-radius: 25px;
+        background-color: #0656d2;
+        color: #fff;
+        border-radius: 4px;
         cursor: pointer;
-        margin: 0 10px;
-        color: white;
-        background: linear-gradient(90deg, #4caf50, #2e7d32);
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s ease-in-out;
     }
-
-    .status-btn:hover {
-        transform: translateY(-3px);
-        box-shadow: 0px 8px 12px rgba(0, 0, 0, 0.2);
+    .filter-bar button:hover {
+        background-color: #003c9d;
     }
-
-    /* Đã duyệt nút */
-    .approved-btn {
-        background: linear-gradient(90deg, #28a745, #218838);
-    }
-
-    /* Chờ xác nhận nút */
-    .pending-btn {
-        background: linear-gradient(90deg, #ffc107, #d39e00);
-        color: black;
-    }
-/* Làm đẹp bảng */
-    /* Table Container */
     table {
         width: 100%;
+        margin: 20px 0;
         border-collapse: collapse;
-        border-spacing: 0;
-        margin-top: 20px;
-        font-size: 14px;
+    }
+    table, th, td {
+        border: 1px solid #ddd;
+    }
+    th, td {
+        padding: 12px;
+        text-align: left;
+    }
+    th {
+        background-color: #0656d2;
+        color: white;
+    }
+    tr:nth-child(even) {
         background-color: #f2f2f2;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
     }
-
-    /* Header của bảng */
-    table thead {
-        background: linear-gradient(90deg, #4caf50, #2e7d32);
-        color: white;
-        font-weight: bold;
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
     }
-
-    table thead th {
-        padding: 12px;
-        text-align: center;
-        border-bottom: 1px solid #e0e0e0;
-    }
-
-    /* Dòng dữ liệu */
-    table tbody tr {
-        border-bottom: 1px solid #e0e0e0;
-        transition: background-color 0.2s ease-in-out;
-    }
-
-    /* Màu sắc xen kẽ */
-    table tbody tr:nth-child(even) {
-        background-color: #f9f9f9;
-    }
-
-    table tbody tr:nth-child(odd) {
-        background-color: #ffffff;
-    }
-
-    /* Hiệu ứng hover khi rê chuột */
-    table tbody tr:hover {
-        background-color: #e8f5e9;
-    }
-
-    /* Các ô dữ liệu */
-    table td {
-        padding: 12px;
-        text-align: center;
-        vertical-align: middle;
-        color: #424242;
-    }
-
-    /* Tăng độ nổi bật cho nút trong bảng */
-    table a, table button {
-        text-decoration: none;
-        color: #007bff;
-        font-weight: bold;
+    .pagination button {
+        padding: 10px 15px;
+        margin: 0 5px;
+        background-color: #0656d2;
+        color: #fff;
         border: none;
-        background: none;
+        border-radius: 4px;
         cursor: pointer;
-        padding: 5px 10px;
-        border-radius: 5px;
-        transition: all 0.2s ease-in-out;
     }
-
-    table a:hover, table button:hover {
-        background-color: #007bff;
-        color: white;
+    .pagination button:hover {
+        background-color: #003c9d;
     }
 
 </style>
 <body data-spy="scroll" data-target=".nav" data-offset="1">
     <header>
         <div style="background-color: white;" class="flex border top">
-            <div class="container2">
+            <div class="container">
                 <div class="header flex">
                     <div class="web icon">
                         <a th:href="@{/api/home}"><img style="width: 50%; height: 50%;" src="https://res.cloudinary.com/hoaptit/image/upload/v1730187948/tro-sinh-vien2_wiuzca.png" alt=""></a>
@@ -615,15 +444,18 @@
     </div>
     <nav>
         <div>
-            <div class="container2">
+            <div class="container">
                 <ul class="menu flex" id="menu">
-                    <li><a class="active" th:href="@{/api/home}">Trang chủ</a></li>
+                    <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                    <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/room/favorites}">Phòng yêu thích</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                    <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/transaction}">Lịch sử giao dịch</a></li>
+                    <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
                 </ul>
             </div>
         </div>
@@ -632,24 +464,20 @@
     <div class="container">
         <section>
             <div style="margin-top: 10px;" class="content">
-                <div class="left border">
-                    <!-- Nút bấm Đã duyệt và Chờ xác nhận -->
-                    <div style="text-align: center;">
-                        <button style="background-color: #155cb0;height: 40px;margin: 15px 10px; width: 100px ; border-radius: 5px" th:onclick="|window.location.href='@{/landlord/appointment?isApproval=true}'|"><p style="color:white;">Đã duyệt</p></button>
-                        <button style="background-color: #888888;height: 40px;margin: 15px 10px; width: 100px ; border-radius: 5px" th:onclick="|window.location.href='@{/landlord/appointment?isApproval=false}'|"><p style="color:white;">Chờ xác nhận</p></button>
-                    </div>
+                <div>
+                    <h3 style="text-align: center">Quản lý lịch hẹn</h3>
                     <!-- Bảng dữ liệu -->
                     <table>
                         <thead>
-                        <tr style="background-color: #155cb0">
-                            <th style="color: white; width: 100px; text-align: center">ID phòng</th>
-                            <th style="color: white; width: 250px; text-align: center">Họ và tên</th>
-                            <th style="color: white; width: 250px; text-align: center">Số điện thoại</th>
-                            <th style="color: white; width: 250px; text-align: center">Email</th>
-                            <th style="color: white; width: 100px; text-align: center">Số người</th>
-                            <th style="color: white; width: 200px; text-align: center">Phương tiện</th>
-                            <th style="color: white; width: 150px; text-align: center">Ngày đến</th>
-                            <th style="color: white; width: 250px;"></th>
+                        <tr style="background-color: #1266dd">
+                            <th style="background-color: #1266dd;color: white; width: 100px; text-align: center">ID phòng</th>
+                            <th style="background-color: #1266dd;color: white; width: 250px; text-align: center">Họ và tên</th>
+                            <th style="background-color: #1266dd;color: white; width: 250px; text-align: center">Số điện thoại</th>
+                            <th style="background-color: #1266dd;color: white; width: 250px; text-align: center">Email</th>
+                            <th style="background-color: #1266dd;color: white; width: 100px; text-align: center">Số người</th>
+                            <th style="background-color: #1266dd;color: white; width: 200px; text-align: center">Phương tiện</th>
+                            <th style="background-color: #1266dd;color: white; width: 150px; text-align: center">Ngày đến</th>
+                            <th style="background-color: #1266dd;color: white; width: 250px;"></th>
                         </tr>
                         </thead>
                         <tbody th:each="appoint, iterStat : ${Appointments}">
@@ -692,15 +520,15 @@
                     </div>
                 </div>
 
-                <div class="right border bg-white">
-                    <h3 class="subject">Tin mới đăng</h3>
-                    <ul class="flex v-menu">
-                        <li><a href="/api/home/news_1">Những lưu ý khi thuê trọ</a></li>
-                        <li><a href="/api/home/news_2">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>
-                        <li><a href="/api/home/news_3">Nên thuê nhà ở đâu</a></li>
-                        <li><a href="/api/home/news_4">Làm sao để nhà đẹp hơn</a></li>
-                    </ul>
-                </div>
+<!--                <div class="right border bg-white">-->
+<!--                    <h3 class="subject">Tin mới đăng</h3>-->
+<!--                    <ul class="flex v-menu">-->
+<!--                        <li><a href="/api/home/news_1">Những lưu ý khi thuê trọ</a></li>-->
+<!--                        <li><a href="/api/home/news_2">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>-->
+<!--                        <li><a href="/api/home/news_3">Nên thuê nhà ở đâu</a></li>-->
+<!--                        <li><a href="/api/home/news_4">Làm sao để nhà đẹp hơn</a></li>-->
+<!--                    </ul>-->
+<!--                </div>-->
                 <div class="right-no-border"></div>
 
                 <div class="right-no-border"></div>

@@ -15,8 +15,8 @@
 </head>
 <style>
     * {
-        margin: 0px;
-        padding: 0px;
+        margin: 0;
+        padding: 0;
     }
 
     hr {
@@ -44,8 +44,6 @@
     }
 
     .right {
-        /* background-color: white; */
-        /* border: 1px solid; */
         width: 28%;
         height: 100%;
     }
@@ -74,28 +72,14 @@
     .header {
         justify-content: space-between;
     }
-
-
-    .rightheader div {
+    .right header div {
         padding: 10px;
     }
-
-    .webicon {
-        width: 11%;
-        padding: 10px;
-    }
-
     .container {
         width: 80%;
         align-items: center;
         margin: 0 auto;
     }
-
-    .detail-container {
-        width: 90%;
-        margin: 0 auto;
-    }
-
     body {
         justify-content: center;
         position: relative;
@@ -108,25 +92,9 @@
         border: 0.5px solid gray;
         border-radius: 7px;
     }
-
-    .bordertop {
-        border-top: 0;
-        border: 0.5px solid gray;
-        border-radius: 7px 7px 0 0;
-    }
-
-    .borderbottom {
-        border: 0.5px solid gray;
-        border-radius: 0 0 7px 7px;
-    }
-
     nav {
         background-color: #1266dd;
     }
-
-
-
-
     nav ul.menu {
         display: flex;
         overflow: hidden;
@@ -227,17 +195,6 @@
         font-size: 20px;
         cursor: pointer;
     }
-
-    .sticky {
-        position: fixed;
-        top: 0;
-        width: 100%;
-    }
-
-    .smaller {
-        padding: 8px 16px !important;
-    }
-
     @keyframes move {
         from {
             left: 0;
@@ -276,19 +233,6 @@
         color: red;
     }
 
-    footer {
-        margin-top: 10px;
-        overflow: hidden;
-        background-color: white;
-        padding: 0.5rem;
-        color: black;
-    }
-
-    footer>span.moving {
-        position: relative;
-        animation: move 10s infinite;
-    }
-
     .item {
         display: flex;
         border-top: 1px solid gray;
@@ -303,11 +247,6 @@
     .image>img {
         border-radius: 7px;
     }
-
-    .border-image{
-        border-radius: 7px;
-    }
-
     .info {
         width: 70%;
     }
@@ -327,21 +266,6 @@
     .info>div {
         padding: 10px;
     }
-
-    .detail-title {
-        font-size: 200%;
-        text-transform: capitalize;
-    }
-
-    .comment-form {
-        width: 90%;
-        margin: 0 auto;
-        padding: 5px 0px;
-        font-size: 120%;
-        background-color: lightgray;
-        border-radius: 7px;
-    }
-
     input[type="text"],
     input[type="email"],
     textarea {
@@ -349,136 +273,16 @@
         padding: 5px 0;
         width: 100%;
     }
-
-    /* .comment-info {
-        width: 90%;
-        margin: 0px auto;
-    } */
-
-    .comment-info table {
-        /* background-color: #f3f3f3; */
-        padding: 20px 30px 15px;
-        width: 100%;
-    }
-
-    .comment-info table th {
-        font-weight: 600;
-        padding-bottom: 20px;
-        text-align: left;
-        text-transform: uppercase;
-        width: 25%;
-    }
-
-    .comment-info table td {
-        padding-bottom: 20px;
-    }
-
-    .comment-info p {
-        text-align: center;
-    }
-
-    .comment-info p button {
-        background-color: #666;
-        border: none;
-        border-radius: 4px;
-        color: #fff;
-        height: 36px;
-        text-align: center;
-        width: 100px;
-    }
-
-    @media only screen and (max-width: 873px) {
-        .comment-info {
-            max-width: 90%;
-            width: auto;
-        }
-
-        .comment-info table th,
-        .comment-info table td {
-            display: block;
-        }
-
-        .comment-info p button {
-            width: 50%;
-            min-width: 200px;
-        }
-    }
-
-    .user-img {
-        margin-top: 10px;
-    }
-
-    .ml-10{
-        margin-left: 10px;
-    }
-
-    .rounded-circle {
-        border-radius: 100px;
-    }
-
-    .mt-10 {
-        margin-top: 10px;
-    }
-
     .header-btn {
         color: white;
         text-decoration: none;
         background-color: #1266dd;
-    }
-
-
-    .price{
-        color: green;
-        font-size: 25px;
-    }
-
-    .mr-5{
-        margin-right: 5px;
-    }
-
-    .test{
-        background-color: red;
-    }
-
-    .wrap-login-btn {
-        width: 100%;
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        padding-top: 5px;
-        padding-bottom: 10px;
-    }
-
-    .login-btn {
-        font-family: Montserrat-Bold;
-        font-size: 15px;
-        line-height: 1.5;
-        color: #fff;
-        text-transform: uppercase;
-        width: 80%;
-        height: 40px;
-        border-radius: 7px;
-        background: #57b846;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        padding: 0 25px;
     }
     button {
         outline: none !important;
         border: none;
         background: transparent;
     }
-
-
-    .thump {
-        width: 15%;
-    }
-
-    .main  {
-        width: 80%;
-    }
-
 </style>
 <body data-spy="scroll" data-target=".nav" data-offset="1">
     <header>
@@ -518,13 +322,17 @@
         <div>
             <div class="container">
                 <ul class="menu flex" id="menu">
-                    <li><a class="active" th:href="@{/api/home}">Trang chủ</a></li>
+                    <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                    <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
+                    <li th:if="${role == 'Admin'}"><a th:href="@{/admin/RevenueManagement}">Doanh thu</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/room/favorites}">Phòng yêu thích</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                    <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/transaction}">Lịch sử giao dịch</a></li>
+                    <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
                 </ul>
             </div>
         </div>
@@ -622,6 +430,10 @@
                                     <div>
                                         <p th:text="'Giá: ' + ${room.getPrice()} + ' triệu/tháng - ' + ${room.getRoomType()}">
                                         </p>
+                                        <p th:text="'Tiền điện: ' + ${room.getElectricityPrice()} + ' k/số'">
+                                        </p>
+                                        <p th:text="'Tiền nước: ' + ${room.getWaterPrice()} + ' k/số'">
+                                        </p>
                                     </div>
                                     <div><p th:text="'Diện tích: '+${room.getArea()} + 'm2'"></p></div>
                                     <div><p th:text="${'Địa chỉ: '+room.getAddress()}"></p></div>
@@ -652,6 +464,23 @@
 
                     </div>
                 </div>
+                <!-- Chatbox Icon -->
+                <div id="chatbox-icon">
+                    <img src="https://cdn-icons-png.flaticon.com/512/599/599995.png" alt="Chat" onclick="toggleChatbox()">
+                </div>
+
+                <!-- Chatbox Popup -->
+                <div id="chatbox">
+                    <div class="chat-header">
+                        <span>Chatbot Tìm Phòng</span>
+                        <button onclick="toggleChatbox()">×</button>
+                    </div>
+                    <div class="chat-body">
+                        <div id="chat-messages"></div>
+                        <input type="text" id="chat-input" placeholder="Nhập tin nhắn...">
+                        <button onclick="sendMessage()">Gửi</button>
+                    </div>
+                </div>
 
                 <div class="right border bg-white">
                     <h3 class="subject">Tin mới đăng</h3>
@@ -671,5 +500,95 @@
     </div>
 
 </body>
+<style>
+    /* Icon chatbox ở góc phải */
+    #chatbox-icon {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        cursor: pointer;
+        z-index: 1000;
+    }
+    #chatbox-icon img {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    }
+
+    /* Giao diện chatbox */
+    #chatbox {
+        position: fixed;
+        bottom: 80px;
+        right: 20px;
+        width: 300px;
+        background: white;
+        border-radius: 10px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+        display: none;
+        z-index: 1000;
+    }
+    .chat-header {
+        background: #007bff;
+        color: white;
+        padding: 10px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+    }
+    .chat-body {
+        padding: 10px;
+    }
+    #chat-messages {
+        height: 200px;
+        overflow-y: auto;
+        border-bottom: 1px solid #ddd;
+        margin-bottom: 10px;
+    }
+    .chat-body input {
+        width: 70%;
+        padding: 5px;
+    }
+    .chat-body button {
+        width: 25%;
+        background: #007bff;
+        color: white;
+        border: none;
+        padding: 5px;
+        cursor: pointer;
+    }
+
+</style>
+<script>
+    function toggleChatbox() {
+        let chatbox = document.getElementById("chatbox");
+        chatbox.style.display = (chatbox.style.display === "block") ? "none" : "block";
+    }
+
+    function sendMessage() {
+        let inputField = document.getElementById("chat-input");
+        let message = inputField.value.trim();
+        if (message === "") return;
+
+        let chatMessages = document.getElementById("chat-messages");
+        chatMessages.innerHTML += "<p><strong>Bạn:</strong> " + message + "</p>";
+
+        // Gửi tin nhắn đến API chatbot
+        fetch('/api/chatbot/query', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ message: message })
+        })
+            .then(response => response.text())
+            .then(data => {
+                chatMessages.innerHTML += "<p><strong>Bot:</strong> " + data + "</p>";
+                chatMessages.scrollTop = chatMessages.scrollHeight; // Cuộn xuống tin nhắn mới
+            });
+
+        inputField.value = "";
+    }
+</script>
 
 </html>

@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Bảng giá tin đăng</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+            integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+    }
+
+    hr {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        border-width: 1px;
+    }
+
+    a{
+        text-decoration: none !important;
+    }
+    .right {
+        width: 28%;
+        height: 100%;
+    }
+
+    .bg-white{
+        background-color: white;
+    }
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .header {
+        justify-content: space-between;
+    }
+    .right header div {
+        padding: 10px;
+    }
+    .container {
+        width: 80%;
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    .border {
+        border: 0.5px solid gray;
+        border-radius: 7px;
+    }
+    nav {
+        background-color: #1266dd;
+    }
+    nav ul.menu {
+        display: flex;
+        overflow: hidden;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+    }
+
+    nav ul.menu>li>a {
+
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    nav ul.menu>li:hover a {
+        border-bottom: 5px solid lightblue;
+        transition: all 0.1s;
+    }
+
+    nav ul.menu>li>a.active {
+        border-bottom: 5px solid lightblue;
+    }
+
+    @media screen and (max-width: 873px) {
+        .menu {
+            flex-direction: column;
+        }
+
+        .container {
+            width: 95%;
+        }
+
+        .right {
+            width: 100%;
+        }
+
+        .toggle {
+            display: block !important;
+        }
+
+        nav {
+            display: none;
+        }
+
+        div.big-device {
+            display: none;
+        }
+
+        div.small-device {
+            display: flex !important;
+        }
+    }
+
+
+    div.small-device {
+        display: none;
+    }
+
+    .toggle {
+        display: none;
+        background-color: #0f305f;
+        color: white;
+        text-align: right;
+        padding: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+    @keyframes move {
+        from {
+            left: 0;
+        }
+
+        to {
+            left: 100%;
+        }
+    }
+
+    .v-menu>li {
+        width: 90%;
+        border-top: 1px solid lightgray;
+    }
+
+    .v-menu>li>a {
+        float: left;
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .v-menu>li>a:hover {
+        color: red;
+    }
+
+    .image>img {
+        border-radius: 7px;
+    }
+
+    .info>div {
+        padding: 10px;
+    }
+    input[type="text"],
+    input[type="email"],
+    textarea {
+        outline: none;
+        padding: 5px 0;
+        width: 100%;
+    }
+    .header-btn {
+        color: white;
+        text-decoration: none;
+        background-color: #1266dd;
+    }
+    button {
+        outline: none !important;
+        border: none;
+        background: transparent;
+    }
+    /**/
+    body {
+        font-family: Arial, sans-serif;
+        background: white;
+        /*padding: 30px;*/
+        color: #333;
+    }
+
+    .title {
+        text-align: center;
+        font-size: 30px;
+        margin-bottom: 5px;
+    }
+
+    .subtitle {
+        text-align: center;
+        color: #777;
+        margin-bottom: 30px;
+    }
+
+    .pricing-table {
+        padding-left: 150px;
+        padding-right: 150px;
+        padding-bottom: 40px;
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        text-align: center;
+        background: white;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+        padding: 15px;
+        border: 1px solid #ddd;
+    }
+
+    thead th {
+        color: white;
+        font-size: 16px;
+    }
+
+    .vip-hot {
+        background: #d32f2f;
+    }
+
+    .normal {
+        background: #0d47a1;
+    }
+
+    .stars {
+        font-size: 14px;
+        color: gold;
+    }
+
+    .discount {
+        color: green;
+        font-size: 14px;
+    }
+
+    .bold-red {
+        color: #d32f2f;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .bold-default {
+        color: #333;
+    }
+
+    /* Tiêu đề chính */
+    h2.fs-1 {
+        font-size: 36px;
+        font-weight: bold;
+        margin-bottom: 2rem;
+    }
+
+    /* Màu theo loại tin */
+    :root {
+        --color-vipnoibat: #cc0000; /* đỏ */
+        --color-vip1: #e91e63; /* hồng */
+        --color-vip2: #ff9800; /* cam */
+        --color-vip3: #2196f3; /* xanh */
+        --color-tinthuong: #333;
+    }
+
+    /* Tô đậm tiêu đề từng loại */
+    #demo-vip-noibat span[style],
+    #demo-vip-1 span[style],
+    #demo-vip-2 span[style],
+    #demo-vip-3 span[style],
+    #demo-tinthuong span[style] {
+        font-weight: bold;
+    }
+
+    /* Ảnh trong hộp */
+    .bg-white img {
+        max-width: 100%;
+        height: auto;
+        display: block;
+    }
+
+</style>
+<body>
+<header>
+    <div style="background-color: white;" class="flex border top">
+        <div class="container">
+            <div class="header flex">
+                <div class="web icon">
+                    <a th:href="@{/api/home}"><img style="width: 50%; height: 50%;"
+                                                   src="https://res.cloudinary.com/hoaptit/image/upload/v1730187948/tro-sinh-vien2_wiuzca.png"
+                                                   alt=""></a>
+                </div>
+                <div class="right header flex">
+                    <div th:if="${username != null}" class="big-device flex">
+                        <div><a class="btn italic" th:href="@{/user/profile}"><h4 th:text="${username}"></h4></a></div>
+                        <div><a class="btn header-btn" th:href="@{/user/logout}">Đăng xuất</a></div>
+                        <div th:if="${role == 'Landlord'}"><a class="btn header-btn" th:href="@{/landlord/add}">Đăng
+                            tin</a></div>
+                    </div>
+                    <div th:if="${username == null}" class="big-device flex">
+                        <div><a class="btn header-btn" th:href="@{/user/login}">Đăng nhập</a></div>
+                        <div><a class="btn header-btn" th:href="@{/user/register}">Đăng ký</a></div>
+
+                    </div>
+                    <div class="small-device flex">
+                        <div><a href="@{/user/login}" type="button" style="padding: 3px;" class="fa fa-sign-in"></a>
+                        </div>
+                        <div><a href="@{/user/register}" type="button" style="padding: 3px;"
+                                class="fa-solid fa-user-plus"></a></div>
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</header>
+<div class="toggle">
+    <i class="fas fa-bars"></i>
+</div>
+<nav>
+    <div>
+        <div class="container">
+            <ul class="menu flex" id="menu">
+                <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
+                <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
+                <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
+                <li th:if="${role == 'Admin'}"><a th:href="@{/admin/RevenueManagement}">Doanh thu</a></li>
+                <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
+                <li th:if="${role == 'Tenant'}"><a th:href="@{/room/favorites}">Phòng yêu thích</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/transaction}">Lịch sử giao dịch</a></li>
+                <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<h1 class="title">Bảng giá tin đăng</h1>
+<p class="subtitle">Áp dụng từ 31/05/2024</p>
+<div class="pricing-table">
+    <table>
+        <thead>
+        <tr>
+            <th></th>
+            <th style="text-align: center" class="vip-hot">Tin VIP Nổi Bật<br><span class="stars">★★★★★</span></th>
+            <th style="text-align: center" class="normal">Tin thường</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Giá ngày</td>
+            <td>50.000₫<br><small>(Tối thiểu 3 ngày)</small></td>
+            <td>0.000₫<br></td>
+        </tr>
+        <tr>
+            <td>Giá tuần</td>
+            <td>315.000₫</td>
+            <td>0.000₫</td>
+        </tr>
+        <tr>
+            <td>Giá tháng</td>
+            <td><s>1.500.000₫</s><br><span class="discount">Giảm 20%</span><br><b>1.200.000₫</b></td>
+            <td><s>0.000₫</s></td>
+        </tr>
+        <tr>
+            <td>Màu sắc tiêu đề</td>
+            <td class="bold-red">MÀU ĐỎ, IN HOA</td>
+            <td class="bold-default">Màu mặc định, viết thường</td>
+        </tr>
+        <tr>
+            <td>Tự động duyệt</td>
+            <td>✅</td>
+            <td>❌</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

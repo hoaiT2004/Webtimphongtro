@@ -4,6 +4,7 @@ import com.example.btl_ltw.entity.Room;
 import com.example.btl_ltw.entity.User;
 import com.example.btl_ltw.model.dto.RoomDto;
 import com.example.btl_ltw.model.dto.UserDto;
+import com.example.btl_ltw.model.request.room.RoomFilterDataRequest;
 import com.example.btl_ltw.service.FavoriteRoomService;
 import com.example.btl_ltw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,17 +35,20 @@ public class FavoriteRoomController {
     private static final int sizeOfPage = 5;
 
     @GetMapping("/favorites")
-    public String showFavoriteRooms(Model model, Authentication auth
+    public String showFavoriteRooms(Model model, Authentication auth,
+                                    @ModelAttribute RoomFilterDataRequest request
                                     , @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         func_common(auth, model);
         Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
         UserDto user = userService.findUserByUsername(auth.getName());
-        Page<Room> roomPage = favoriteRoomService.getFavoriteRooms(pageable, user.getId());
+        Page<Room> roomPage = favoriteRoomService.getFavoriteRoomsByManyContraints(request, pageable, user.getId());
         List<Room> roomList = new LinkedList<>();
         roomPage.forEach(roomList::add);
         model.addAttribute("rooms", RoomDto.toDto(roomList));
         model.addAttribute("currentPage", pageNo);
         model.addAttribute("totalPage", roomPage.getTotalPages() == 0 ? 1 : roomPage.getTotalPages());
+        model.addAttribute("request", request);
+
         return "room/favorite_rooms";
     }
 

@@ -1,30 +1,19 @@
 package com.example.btl_ltw.controller;
 
-import java.text.ParseException;
-import java.util.ArrayList;
 import java.util.List;
-
-import com.example.btl_ltw.entity.Image;
-import com.example.btl_ltw.entity.Room;
 import com.example.btl_ltw.model.dto.CommentDto;
 import com.example.btl_ltw.model.dto.UserDto;
 import com.example.btl_ltw.model.request.AppointmentRequest;
 import com.example.btl_ltw.model.dto.RoomDto;
 import com.example.btl_ltw.repository.ImageRepository;
-import com.example.btl_ltw.service.AppointmentService;
-import com.example.btl_ltw.service.CommentService;
+import com.example.btl_ltw.service.*;
 import org.springframework.data.domain.PageRequest;
-import com.example.btl_ltw.service.RoomService;
-import com.example.btl_ltw.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 @Controller
 @RequestMapping("api/room")
@@ -41,15 +30,15 @@ public class RoomController {
     @Autowired
     private AppointmentService appointmentService;
 
-    private static final int sizeOfPage = 5;
     @Autowired
-    private ImageRepository imageRepository;
+    private RoomStarService roomStarService;
 
     @GetMapping
     public String showDetailRoom(Authentication auth,
                                  @RequestParam(name = "FavoriteRoomAddingError" , defaultValue = "false1") String error,
                                  @RequestParam(name = "commentId", defaultValue = "-4") Integer commentId,
                                  @RequestParam(name = "room_id") String room_id, Model model) {
+        roomService.addView(Long.parseLong(room_id));
         RoomDto roomDto = roomService.getInfoRoomByRoom_Id(room_id);
         List<String> imageDtos = roomService.getAllImagesByRoom_Id(room_id);
         model.addAttribute("usernameLandlord", userService.findUsernameById(roomDto.getUser_id()));
@@ -61,8 +50,19 @@ public class RoomController {
         UserDto userDto = userService.getUserById(roomDto.getUser_id());
         model.addAttribute("userDto", userDto);
 
-        List<CommentDto> commentDtos = commentService.getAllCommentsByRoom_id(Long.parseLong(room_id));
-        model.addAttribute("comments", commentDtos);
+        List<CommentDto> parentCommentDtos = commentService.getAllParentCommentsByRoom_id(Long.parseLong(room_id));
+        List<CommentDto> subCommentDtos = commentService.getAllSubCommentsByRoom_id(Long.parseLong(room_id));
+        model.addAttribute("parentComments", parentCommentDtos);
+        model.addAttribute("subComments", subCommentDtos);
+
+        //////// Đánh giá sao
+        model.addAttribute("star1", roomStarService.StarTotal(Long.parseLong(room_id), 1));
+        model.addAttribute("star2", roomStarService.StarTotal(Long.parseLong(room_id), 2));
+        model.addAttribute("star3", roomStarService.StarTotal(Long.parseLong(room_id), 3));
+        model.addAttribute("star4", roomStarService.StarTotal(Long.parseLong(room_id), 4));
+        model.addAttribute("star5", roomStarService.StarTotal(Long.parseLong(room_id), 5));
+        model.addAttribute("starAvarage", roomStarService.StarAverage(Long.parseLong(room_id)));
+
 
         commonFunc(auth, model);
         return "room/details";
@@ -84,6 +84,12 @@ public class RoomController {
         return "redirect:/api/home";
     }
 
+    @PostMapping("/addStar")
+    public String addStar(@RequestParam(name = "roomId") String roomId, @RequestParam(name = "rating") String rating, Authentication authentication) {
+        roomStarService.addStar(Long.parseLong(roomId), Long.parseLong(rating), authentication.getName());
+        return "redirect:/api/room?room_id=" + roomId;
+    }
+
     private static void commonFunc(Authentication auth, Model model) {
         if (auth != null) {
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
@@ -93,13 +99,4 @@ public class RoomController {
         }
     }
 
-
-
-    private static void commonFunc2(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Page<Room> pages) {
-        List<Room> dtoList = new ArrayList<>();
-        pages.forEach(dtoList::add);
-        model.addAttribute("rooms", RoomDto.toDto(dtoList));
-        model.addAttribute("currentPage", pageNo);
-        model.addAttribute("totalPage", pages.getTotalPages() == 0 ? 1 : pages.getTotalPages());
-    }
 }

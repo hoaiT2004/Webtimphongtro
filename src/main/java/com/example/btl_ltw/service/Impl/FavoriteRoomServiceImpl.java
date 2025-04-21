@@ -1,11 +1,11 @@
 package com.example.btl_ltw.service.Impl;
 
+import com.example.btl_ltw.common.RoomType;
+import com.example.btl_ltw.common.RoomTypeConverter;
 import com.example.btl_ltw.entity.FavoriteRoom;
 import com.example.btl_ltw.entity.Room;
-import com.example.btl_ltw.entity.User;
+import com.example.btl_ltw.model.request.room.RoomFilterDataRequest;
 import com.example.btl_ltw.repository.FavoriteRoomRepository;
-import com.example.btl_ltw.repository.RoomRepository;
-import com.example.btl_ltw.repository.UserRepository;
 import com.example.btl_ltw.service.FavoriteRoomService;
 import org.apache.kafka.common.errors.DuplicateResourceException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +13,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Collectors;
 
 @Service
 public class FavoriteRoomServiceImpl implements FavoriteRoomService {
@@ -36,8 +34,20 @@ public class FavoriteRoomServiceImpl implements FavoriteRoomService {
     }
 
     @Override
-    public Page<Room> getFavoriteRooms(Pageable pageable, Long userId) {
-        return favoriteRoomRepository.findByUser_id(pageable, userId);
+    public Page<Room> getFavoriteRoomsByManyContraints(RoomFilterDataRequest request, Pageable pageable, Long userId) {
+        Page<Room> pages = null;
+        if (request.isNull()) {
+            pages = favoriteRoomRepository.findByUser_id(pageable, userId);
+        } else {
+            RoomType roomType;
+            try {
+                roomType = RoomTypeConverter.convertToEntityAttributeGlobal(request.getRoomType());
+            } catch (Exception ex) {
+                roomType = null;
+            }
+            pages = favoriteRoomRepository.findAllWithManyConstraints(request.getPrice(), request.getAddress(), request.getArea(), roomType, userId, pageable);
+        }
+        return pages;
     }
 
     @Override

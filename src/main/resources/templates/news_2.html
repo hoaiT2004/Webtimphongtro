@@ -553,9 +553,11 @@
     <div>
         <div class="container">
             <ul class="menu flex" id="menu">
-                <li><a class="active" th:href="@{/api/home}">Trang chủ</a></li>
+                <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                 <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
                 <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
+                <li th:if="${role == 'Admin'}"><a th:href="@{/admin/RevenueManagement}">Doanh thu</a></li>
                 <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                 <li th:if="${role == 'Tenant'}"><a th:href="@{/room/favorites}">Phòng yêu thích</a></li>
                 <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>

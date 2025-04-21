@@ -82,16 +82,6 @@
             padding: 10px;
         }
 
-        .webicon {
-            width: 11%;
-            padding: 10px;
-        }
-
-        .container {
-            width: 80%;
-            align-items: center;
-            margin: 0 auto;
-        }
         .filter-item button {
             padding: 10px 20px;
             background-color: #003c9d; /* Màu nền xanh dương đậm */
@@ -107,55 +97,21 @@
             background-color: #002e7a; /* Màu nền khi hover */
         }
 
-        .detail-container {
-            width: 90%;
-            margin: 0 auto;
-        }
-
         body {
             justify-content: center;
             position: relative;
             align-items: center;
         }
-        .title {
-            font-family: 'Montserrat', sans-serif; /* Sử dụng font Montserrat */
-            font-size: 36px; /* Kích thước chữ */
-            color: #020101; /* Màu chữ trắng */
-            text-align: center; /* Căn giữa */
-            margin: 20px 0; /* Khoảng cách trên và dưới */
-            text-transform: uppercase; /* Chữ in hoa */
-            letter-spacing: 2px; /* Khoảng cách giữa các chữ */
-            font-weight: bold; /* Chữ đậm */
-            padding: 20px; /* Khoảng cách bên trong */
-            background: blue; /* Nền gradient đậm ở giữa và nhạt dần ra */
-            border-radius: 10px; /* Bo tròn góc */
-
-        }
-
 
         .border {
             border: 0.5px solid gray;
             border-radius: 7px;
         }
 
-        .bordertop {
-            border-top: 0;
-            border: 0.5px solid gray;
-            border-radius: 7px 7px 0 0;
-        }
-
-        .borderbottom {
-            border: 0.5px solid gray;
-            border-radius: 0 0 7px 7px;
-        }
-
         nav {
             width: 100vw;
             background-color: #1266dd;
         }
-
-
-
 
         nav ul.menu {
             display: flex;
@@ -222,26 +178,6 @@
 
             div.small-device {
                 display: flex !important;
-            }
-
-            .main-info {
-                display: block;
-            }
-
-            .sticky {
-                position: absolute !important;
-                top: 0;
-                width: 100%
-            }
-            .item{
-                display: block !important;
-            }
-            .image{
-                width: 100% !important;
-                margin: 0 !important;
-            }
-            .info{
-                width: 100% !important;
             }
         }
 
@@ -403,7 +339,7 @@
         }
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f4;
+            background-color: white;
             color: #333;
             margin: 0;
             padding: 0;
@@ -512,12 +448,15 @@
     <div>
         <div class="container">
             <ul class="menu flex" id="menu">
-                <li><a  th:href="@{/api/home}">Trang chủ</a></li>
+                <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                 <li th:if="${role == 'Admin'}"><a th:href="@{/admin/UserManagement}">Người dùng</a></li>
                 <li th:if="${role == 'Admin'}"><a class="active" th:href="@{/admin/RoomManagement}">Phòng</a></li>
                 <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                 <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
                 <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/transaction}">Lịch sử giao dịch</a></li>
+                <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
             </ul>
         </div>
     </div>
@@ -526,32 +465,116 @@
 <div class="container" >
     <section>
         <div style="margin-top: 10px;" class="content">
-            <div class="left border">
-                <!-- Nút bấm Đã duyệt và Chờ xác nhận -->
-                <div style="text-align: center;">
-                    <button style="background-color: #155cb0;height: 40px;margin: 15px 10px; width: 100px ; border-radius: 5px" th:onclick="|window.location.href='@{/landlord/manage?isApproval=true}'|"><p style="color:white;">Đã duyệt</p></button>
-                    <button style="background-color: #888888;height: 40px;margin: 15px 10px; width: 100px ; border-radius: 5px" th:onclick="|window.location.href='@{/landlord/manage?isApproval=false}'|"><p style="color:white;">Chờ xác nhận</p></button>
+            <div>
+                <h3 style="text-align: center">Quản lý phòng</h3>
+                <div class="filter-container container" style="border-color: white">
+                    <form th:action="@{/landlord/manage}" method="GET" class="flex" style="justify-content: space-evenly; margin-top: 20px; margin-bottom: 20px;">
+                        <!-- Lọc theo giá -->
+                        <div class="filter-item">
+                            <label for="price">Giá</label>
+                            <select id="price" name="price" th:value="${request.price}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="1" th:selected="${request.price == '1'}">Dưới 1 triệu</option>
+                                <option value="1-2" th:selected="${request.price == '1-2'}">1 - 2 triệu</option>
+                                <option value="2-3" th:selected="${request.price == '2-3'}">2 - 3 triệu</option>
+                                <option value="3" th:selected="${request.price == '3'}">Trên 3 triệu</option>
+                            </select>
+                        </div>
+
+                        <!-- Lọc theo địa chỉ -->
+                        <div class="filter-item">
+                            <label for="address">Địa chỉ</label>
+                            <select id="address" name="address" th:value="${request.address}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="Biên Giang" th:selected="${request.address == 'Biên Giang'}">Biên Giang</option>
+                                <option value="Dương Nội" th:selected="${request.address == 'Dương Nội'}">Dương Nội</option>
+                                <option value="Đồng Mai" th:selected="${request.address == 'Đồng Mai'}">Đồng Mai</option>
+                                <option value="Hà Cầu" th:selected="${request.address == 'Hà Cầu'}">Hà Cầu</option>
+                                <option value="Kiến Hưng" th:selected="${request.address == 'Kiến Hưng'}">Kiến Hưng</option>
+                                <option value="La Khê" th:selected="${request.address == 'La Khê'}">La Khê</option>
+                                <option value="Mộ Lao" th:selected="${request.address == 'Mộ Lao'}">Mộ Lao</option>
+                                <option value="Nguyễn Trãi" th:selected="${request.address == 'Nguyễn Trãi'}">Nguyễn Trãi</option>
+                                <option value="Phú La" th:selected="${request.address == 'Phú La'}">Phú La</option>
+                                <option value="Phú Lãm" th:selected="${request.address == 'Phú Lãm'}">Phú Lãm</option>
+                                <option value="Phú Lương" th:selected="${request.address == 'Phú Lương'}">Phú Lương</option>
+                                <option value="Phúc La" th:selected="${request.address == 'Phúc La'}">Phúc La</option>
+                                <option value="Quang Trung" th:selected="${request.address == 'Quang Trung'}">Quang Trung</option>
+                                <option value="Vạn Phúc" th:selected="${request.address == 'Vạn Phúc'}">Vạn Phúc</option>
+                                <option value="Văn Quán" th:selected="${request.address == 'Văn Quán'}">Văn Quán</option>
+                                <option value="Yên Nghĩa" th:selected="${request.address == 'Yên Nghĩa'}">Yên Nghĩa</option>
+                                <option value="Yết Kiêu" th:selected="${request.address == 'Yết Kiêu'}">Yết Kiêu</option>
+                            </select>
+
+
+                        </div>
+
+                        <!-- Lọc theo diện tích -->
+                        <div class="filter-item">
+                            <label for="area">Diện tích</label>
+                            <select id="area" name="area" th:value="${request.area}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="20" th:selected="${request.area == '20'}">Dưới 20m²</option>
+                                <option value="20-30" th:selected="${request.area == '20-30'}">20 - 30m²</option>
+                                <option value="30-40" th:selected="${request.area == '30-40'}">30 - 40m²</option>
+                                <option value="40" th:selected="${request.area == '40'}">Trên 40m²</option>
+                            </select>
+                        </div>
+
+                        <!-- Lọc theo kiểu phòng -->
+                        <div class="filter-item">
+                            <label for="roomType">Kiểu phòng</label>
+                            <select id="roomType" name="roomType" th:value="${request.roomType}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="CHUNG_CHU" th:selected="${request.roomType == 'CHUNG_CHU'}">Chung chủ</option>
+                                <option value="KHONG_CHUNG_CHU" th:selected="${request.roomType == 'KHONG_CHUNG_CHU'}">Không chung chủ</option>
+                            </select>
+                        </div>
+
+
+                        <!-- Nút lọc -->
+                        <div class="filter-item">
+                            <button type="submit" style="width: 110px; height: 40px; padding: 10px 10px; background-color: #1266dd">Lọc kết quả</button>
+                        </div>
+                    </form>
                 </div>
+
                 <table>
                     <thead>
                     <tr>
-                        <th>Ảnh</th>
-                        <th>Giá</th>
-                        <th>Địa Chỉ</th>
-                        <th>Diện Tích</th>
-                        <th>Kiểu Phòng</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
+                        <th style="background-color: #1266dd">Ảnh</th>
+                        <th style="background-color: #1266dd">Giá</th>
+                        <th style="background-color: #1266dd;">Tiền điện</th>
+                        <th style="background-color: #1266dd;">Tiền nước</th>
+                        <th style="background-color: #1266dd">Địa Chỉ</th>
+                        <th style="background-color: #1266dd">Diện Tích</th>
+                        <th style="background-color: #1266dd">Kiểu Phòng</th>
+                        <th style="background-color: #1266dd">Trạng thái</th>
+                        <th style="background-color: #1266dd">Hành động</th>
                     </tr>
                     </thead>
                     <tbody id="roomTable">
                     <tr th:each="room : ${rooms}">
                         <td><image th:src="${room.getImage()}" style="width: 50px; height: 50px"></image></td>
-                        <td th:text="${room.price + ' triệu/tháng'}"></td>
-                        <td th:text="${room.address}"></td>
-                        <td th:text="${room.area + ' m²'}"></td>
-                        <td th:text="${room.roomType}"></td>
-                        <td th:text="${room.isApproval ? 'Đã duyệt' : 'Chưa duyệt'}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.price + ' triệu/tháng'}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.getElectricityPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.getWaterPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.address}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.area + ' m²'}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.roomType}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.isApproval ? 'Đã duyệt' : 'Chưa duyệt'}"></td>
+
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.price + ' triệu/tháng'}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.getElectricityPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.getWaterPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.address}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.area + ' m²'}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.roomType}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red">Đã duyệt</td>
+
                         <td>
                             <div style="width: 100px; text-align: center;">
                                 <!-- Lưu URL xóa trong input hidden -->
@@ -561,22 +584,30 @@
                             <div>
                                 <a href="#" th:onclick="'sendRoomId(' + ${room.getRoom_id()} + ')'" style="text-align: center">Cập nhật</a>
                             </div>
+<!--                            <div th:if="${room.isVipStatus() == true}">-->
+<!--                                <a href="#" style="text-align: center">Gia hạn</a>-->
+<!--                            </div>-->
+<!--                            <div th:if="${room.isVipStatus() != true}">-->
+<!--                                <a href="#" style="text-align: center">Nâng cấp</a>-->
+<!--                            </div>-->
                         </td>
+
+
                     </tr>
                     </tbody>
                 </table>
                 <div class="box-footer clearfix">
                     <ul class="pagination pagination-sm no-margin pull-right">
                         <li th:if="${currentPage > 1}">
-                            <a th:href="@{'/landlord/manage?pageNo=' + ${currentPage - 1}}"><<</a>
+                            <a th:href="@{'/landlord/manage?pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
                         </li>
                         <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                             th:classappend="${currentPage == i ? 'active' : ''}">
-                            <a th:href="@{'/landlord/manage?pageNo=' + ${i}}" th:text="${i}">
+                            <a th:href="@{'/landlord/manage?pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
                             </a>
                         </li>
                         <li th:if="${currentPage < totalPage}">
-                            <a th:href="@{'/landlord/manage?pageNo=' + ${currentPage + 1}}">>>
+                            <a th:href="@{'/landlord/manage?pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
                             </a>
                         </li>
                     </ul>
@@ -585,15 +616,15 @@
                 </div>
             </div>
 
-            <div class="right border bg-white">
-                <h3 class="subject">Tin mới đăng</h3>
-                <ul class="flex v-menu">
-                    <li><a href="/api/home/news_1">Những lưu ý khi thuê trọ</a></li>
-                    <li><a href="/api/home/news_2">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>
-                    <li><a href="/api/home/news_3">Nên thuê nhà ở đâu</a></li>
-                    <li><a href="/api/home/news_4">Làm sao để nhà đẹp hơn</a></li>
-                </ul>
-            </div>
+<!--            <div class="right border bg-white">-->
+<!--                <h3 class="subject">Tin mới đăng</h3>-->
+<!--                <ul class="flex v-menu">-->
+<!--                    <li><a href="/api/home/news_1">Những lưu ý khi thuê trọ</a></li>-->
+<!--                    <li><a href="/api/home/news_2">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>-->
+<!--                    <li><a href="/api/home/news_3">Nên thuê nhà ở đâu</a></li>-->
+<!--                    <li><a href="/api/home/news_4">Làm sao để nhà đẹp hơn</a></li>-->
+<!--                </ul>-->
+<!--            </div>-->
             <div class="right-no-border"></div>
             <div class="right-no-border"></div>
         </div>

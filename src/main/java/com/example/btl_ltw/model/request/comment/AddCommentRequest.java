@@ -9,6 +9,9 @@ import lombok.*;
 @NoArgsConstructor
 public class AddCommentRequest {
 
+    @Builder.Default
+    private long parentCommentId = 0;
+
     private String username;
 
     private String content;

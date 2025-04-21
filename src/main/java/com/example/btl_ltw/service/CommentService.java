@@ -6,7 +6,9 @@ import com.example.btl_ltw.model.request.comment.AddCommentRequest;
 
 public interface CommentService {
 
-    List<CommentDto> getAllCommentsByRoom_id(long room_id);
+    List<CommentDto> getAllParentCommentsByRoom_id(long room_id);
+
+    List<CommentDto> getAllSubCommentsByRoom_id(long room_id);
 
     void addComment(AddCommentRequest request);
 

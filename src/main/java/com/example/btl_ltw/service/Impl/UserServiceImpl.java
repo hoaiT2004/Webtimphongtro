@@ -23,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class UserServiceImpl implements UserDetailsService, UserService {
@@ -81,7 +83,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public List<UserDto> getAllUser() {
-        List<User> users = userRepository.findAll();
+        List<User> users = userRepository.findAllUser();
         return UserDto.toDto(users);
     }
 
@@ -119,8 +121,9 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     @Transactional
-    public ChangeAvatarResponse changeAvatar(ChangeAvatarRequest request) {
-        String linkAvatar = fileService.uploadFile(request.getFile());
+    public ChangeAvatarResponse changeAvatar(ChangeAvatarRequest request) throws ExecutionException, InterruptedException {
+        CompletableFuture<String> futureUrl = fileService.uploadFile(request.getFile());
+        String linkAvatar = futureUrl.get();
         userRepository.updateAvatarUser(linkAvatar, request.getUsername());
         return new ChangeAvatarResponse(request.getUsername());
     }

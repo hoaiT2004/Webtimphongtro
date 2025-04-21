@@ -674,13 +674,15 @@
         <div>
             <div class="container">
                 <ul class="menu flex" id="menu">
-                    <li><a class="active" th:href="@{/api/home}">Trang chủ</a></li>
+                    <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                    <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/room/favorites}">Phòng yêu thích</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                    <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
                 </ul>
             </div>
         </div>
@@ -699,7 +701,7 @@
                 <input type="date" name="comeDate" onmouseout="validateDate()" id="comeDate" required>
                 <span id="error-message" class="text-danger"></span>
                 <hr>
-                <input type="submit" class="submit-button" value="Update">
+                <input type="submit" class="submit-button" value="Update" style="background-color: #1266dd">
             </form>
         </div>
     </div>
@@ -712,11 +714,11 @@
                     <table>
                         <thead>
                         <tr>
-                            <th style="color: white; width: 40px; text-align: center">STT</th>
-                            <th style="color: white; width: 100px; text-align: center">ID phòng</th>
-                            <th style="color: white; width: 250px; text-align: center">Ngày đến</th>
-                            <th style="color: white; width: 100px;">Trạng thái</th>
-                            <th style="color: white; width: 100px;"></th>
+                            <th style="background-color: #1266dd; color: white; width: 40px; text-align: center">STT</th>
+                            <th style="background-color: #1266dd; color: white; width: 100px; text-align: center">ID phòng</th>
+                            <th style="background-color: #1266dd; color: white; width: 250px; text-align: center">Ngày đến</th>
+                            <th style="background-color: #1266dd; color: white; width: 100px;">Trạng thái</th>
+                            <th style="background-color: #1266dd; color: white; width: 100px;"></th>
                         </tr>
                         </thead>
                         <tbody th:each="appoint, iterStat : ${Appointments}">

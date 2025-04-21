@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequestMapping("/user")
@@ -87,7 +88,7 @@ public class UserController {
     }
 
     @PostMapping("/uploadFile")
-    public String changeAvatar(@RequestParam(name = "linkAvatar") MultipartFile file, Authentication authentication) {
+    public String changeAvatar(@RequestParam(name = "linkAvatar") MultipartFile file, Authentication authentication) throws ExecutionException, InterruptedException {
         if (authentication != null) {
             var request = ChangeAvatarRequest.builder()
                     .file(file)

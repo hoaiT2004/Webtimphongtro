@@ -35,4 +35,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u WHERE u.role_id != 3")
     Page<User> findAllUserExpectAdmin(Pageable pageable);
+
+    @Query("SELECT u FROM User u")
+    List<User> findAllUser();
 }

@@ -101,8 +101,6 @@
         justify-content: center;
         position: relative;
         align-items: center;
-        background: linear-gradient(-135deg, cyan, lightcyan, blue);
-
     }
 
     .border {
@@ -587,12 +585,15 @@
     <div>
         <div class="container">
             <ul class="menu flex" id="menu">
-                <li><a class="active" th:href="@{/api/home}">Trang chủ</a></li>
+                <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                 <li th:if="${role == 'Admin'}"><a href="#">Người dùng</a></li>
                 <li th:if="${role == 'Admin'}"><a href="#">Phòng</a></li>
                 <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                 <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
                 <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/transaction}">Lịch sử giao dịch</a></li>
+                <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
             </ul>
         </div>
     </div>
@@ -632,6 +633,22 @@
                             <div class="col-sm-9">
                                 <input class="form-control" type="number" id="price" th:field="*{price}" required
                                        min="1" step="any" placeholder="Nhập giá thuê lớn hơn 0"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3">(*) Tiền điện: </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="number" id="electricityPrice" th:field="*{electricityPrice}" required
+                                       min="1" step="any" placeholder="Nhập tiền điện lớn hơn 0"/>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-3">(*) Tiền nước: </label>
+                            <div class="col-sm-9">
+                                <input class="form-control" type="number" id="waterPrice" th:field="*{waterPrice}" required
+                                       min="1" step="any" placeholder="Nhập tiền nước lớn hơn 0"/>
                             </div>
                         </div>
 
@@ -696,7 +713,7 @@
 
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-9">
-                                <button type="submit" class="btn btn-primary"
+                                <button type="submit" class="btn btn-primary" style="background-color: #1266dd"
                                         onclick="return confirm('Bạn có chắc chắn muốn thực hiện thao tác này?');">
                                     Cập nhật
                                 </button>

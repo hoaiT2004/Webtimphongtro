@@ -36,4 +36,7 @@ public class User extends BaseEntity {
     private long role_id;
 
     private String linkAvatar;
+
+    @Builder.Default
+    private Long money = 0L;
 }

@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Phòng trọ sinh viên</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css"
+          integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://code.jquery.com/jquery-3.7.0.js"
+            integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+</head>
+<style>
+    * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    hr {
+        margin-left: auto;
+        margin-right: auto;
+        width: 90%;
+        border-width: 1px;
+    }
+
+    a {
+        text-decoration: none !important;
+    }
+
+    .right {
+        /* background-color: white; */
+        /* border: 1px solid; */
+        width: 28%;
+        height: 100%;
+    }
+
+    .flex {
+        display: flex;
+        align-items: center;
+    }
+
+    .header {
+        justify-content: space-between;
+    }
+
+
+    .right header div {
+        padding: 10px;
+    }
+
+    .container {
+        width: 80%;
+        align-items: center;
+        margin: 0 auto;
+    }
+
+    body {
+        justify-content: center;
+        position: relative;
+        align-items: center;
+
+    }
+
+    nav {
+        background-color: #1266dd;
+    }
+
+
+    nav ul.menu {
+        display: flex;
+        overflow: hidden;
+        list-style-type: none;
+        padding: 0;
+        margin: 0;
+
+    }
+
+    nav ul.menu > li > a {
+
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    nav ul.menu > li:hover a {
+        border-bottom: 5px solid lightblue;
+        transition: all 0.1s;
+    }
+
+    nav ul.menu > li > a.active {
+        border-bottom: 5px solid lightblue;
+    }
+
+    @media screen and (max-width: 873px) {
+        .menu {
+            flex-direction: column;
+        }
+
+        .container {
+            width: 95%;
+        }
+
+        .right {
+            width: 100%;
+        }
+
+        .toggle {
+            display: block !important;
+        }
+
+        nav {
+            display: none;
+        }
+
+        div.big-device {
+            display: none;
+        }
+
+        div.small-device {
+            display: flex !important;
+        }
+    }
+
+
+    div.small-device {
+        display: none;
+    }
+
+    .toggle {
+        display: none;
+        background-color: #0f305f;
+        color: white;
+        text-align: right;
+        padding: 10px;
+        font-size: 20px;
+        cursor: pointer;
+    }
+
+    @keyframes move {
+        from {
+            left: 0;
+        }
+
+        to {
+            left: 100%;
+        }
+    }
+
+    .v-menu > li {
+        width: 90%;
+        border-top: 1px solid lightgray;
+    }
+
+    .v-menu > li > a {
+        float: left;
+        display: block;
+        color: black;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    .v-menu > li > a:hover {
+        color: red;
+    }
+
+    .image > img {
+        border-radius: 7px;
+    }
+
+    .info > div {
+        padding: 10px;
+    }
+
+    .header-btn {
+        color: white;
+        text-decoration: none;
+        background-color: #1266dd;
+    }
+
+    button {
+        outline: none !important;
+        border: none;
+        background: transparent;
+    }
+
+    h1 {
+        font-size: 20px;
+    }
+/*   */
+    .vip-options {
+        margin-top: 15px;
+        display: none;
+    }
+    label {
+        margin-right: 10px;
+    }
+</style>
+<body data-spy="scroll" data-target=".nav" data-offset="1">
+<header>
+    <div style="background-color: white;" class="flex border top">
+        <div class="container">
+            <div class="header flex">
+                <div class="web icon">
+                    <a th:href="@{/api/home}"><img style="width: 50%; height: 50%;"
+                                                   src="https://res.cloudinary.com/hoaptit/image/upload/v1730187948/tro-sinh-vien2_wiuzca.png"
+                                                   alt=""></a>
+                </div>
+                <div class="right header flex">
+                    <div th:if="${username != null}" class="big-device flex">
+                        <div><a class="btn italic" th:href="@{/user/profile}"><h4 th:text="${username}"></h4></a></div>
+                        <div><a class="btn header-btn" th:href="@{/user/logout}">Đăng
+                            xuất</a></div>
+                        <div th:if="${role == 'Landlord'}"><a class="btn header-btn" th:href="@{/landlord/add}">Đăng tin</a></div>
+                    </div>
+                    <div th:if="${username == null}" class="big-device flex">
+                        <div><a class="btn header-btn" th:href="@{/user/login}"><i style="margin-right: 5px;"
+                                                                                   class="fa fa-sign-in"></i>Đăng
+                            nhập</a></div>
+                        <div><a class="btn header-btn" th:href="@{/user/register}"><i style="margin-right: 5px;"
+                                                                                      class="fa fa-address-book"></i>Đăng
+                            ký</a></div>
+                    </div>
+                    <div class="small-device flex">
+                        <div><a href="@{/user/login}" type="button" style="padding: 3px;" class="fa fa-sign-in"></a>
+                        </div>
+                        <div><a href="@{/user/register}" type="button" style="padding: 3px;"
+                                class="fa-solid fa-user-plus"></a></div>
+                        <div><a href="#" type="button" style="padding: 3px;" class="fa-solid fa-plus"></a></div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</header>
+<div class="toggle">
+    <i class="fas fa-bars"></i>
+</div>
+<nav>
+    <div>
+        <div class="container" >
+            <ul class="menu flex" id="menu">
+                <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
+                <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
+                <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
+                <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/transaction}">Lịch sử giao dịch</a></li>
+                <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div style="max-width: 600px; margin: 0 auto; padding: 60px 30px 30px;border: 1px solid #ccc; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); background-color: #fff;">
+    <h2 class="text-center" style="margin-bottom: 30px;">Chọn loại phòng</h2>
+
+    <form id="roomForm" class="form-horizontal">
+        <div class="form-group">
+            <label class="control-label col-sm-4" style="text-align: left">Loại phòng:</label>
+            <div class="col-sm-8">
+                <label class="radio-inline">
+                    <input type="radio" name="roomType" value="normal" checked> Phòng thường
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="roomType" value="vip"> Phòng VIP
+                </label>
+            </div>
+        </div>
+
+        <div class="form-group text-center">
+            <a th:href="@{/landlord/addFinish}" style="width: 100px" id="normalClick" class="btn btn-primary">Thanh toán</a>
+        </div>
+
+        <div class="vip-options" id="vipOptions">
+            <div class="form-group">
+                <label for="durationType" style="text-align: left" class="control-label col-sm-4">Chọn gói:</label>
+                <div class="col-sm-8">
+                    <select id="durationType" name="durationType" class="form-control">
+                        <option value="ngay">Ngày (50.000đ)</option>
+                        <option value="tuan">Tuần (315.000đ)</option>
+                        <option value="thang">Tháng (1.500.000đ)</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="durationValue" style="text-align: left" id="durationValueLabel" class="control-label col-sm-4">Số ngày:</label>
+                <div class="col-sm-8">
+                    <input type="number" id="durationValue" name="durationValue" min="3" class="form-control">
+                </div>
+            </div>
+            <div class="form-group">
+                <p style="text-align: left">Tổng tiền: <span id="totalAmount">0</span> đ</p>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-6" style="text-align: left">Phương thức thanh toán:</label>
+                <div class="col-sm-6">
+                    <label class="radio-inline">
+                        <input type="radio" name="paymentMethod" value="vnpay" checked> VNPAY
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="paymentMethod" value="wallet"> Chuyển từ tài khoản
+                    </label>
+                </div>
+            </div>
+            <div class="form-group text-center">
+                <button type="button" id="payBtn" class="btn btn-primary">Thanh toán</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+
+</body>
+</html>
+<script>
+    const roomTypeRadios = document.querySelectorAll('input[name="roomType"]');
+    const vipOptions = document.getElementById('vipOptions');
+    const durationType = document.getElementById('durationType');
+    const durationLabel = document.getElementById('durationValueLabel');
+    const durationInput = document.getElementById('durationValue');
+    const totalAmountSpan = document.getElementById('totalAmount');
+    const normalClick = document.getElementById('normalClick');
+
+    const prices = {
+        ngay: 50000,
+        tuan: 315000,
+        thang: 1500000
+    };
+
+    function updateTotal() {
+        const type = durationType.value;
+        const value = parseInt(durationInput.value) || 0;
+        const total = prices[type] * value;
+        totalAmountSpan.textContent = total.toLocaleString('vi-VN');
+    }
+
+    // Slide animation
+    function slideDown(el) {
+        el.style.display = 'block';
+        el.style.height = '0';
+        el.style.overflow = 'hidden';
+        let h = el.scrollHeight;
+        el.style.transition = 'height 0.3s ease';
+        el.style.height = h + 'px';
+        setTimeout(() => {
+            el.style.height = '';
+            el.style.overflow = '';
+        }, 300);
+    }
+
+    function slideUp(el) {
+        el.style.height = el.scrollHeight + 'px';
+        el.offsetHeight; // force repaint
+        el.style.transition = 'height 0.3s ease';
+        el.style.height = '0';
+        el.style.overflow = 'hidden';
+        setTimeout(() => {
+            el.style.display = 'none';
+            el.style.height = '';
+            el.style.overflow = '';
+        }, 300);
+    }
+
+    roomTypeRadios.forEach(radio => {
+        radio.addEventListener('change', () => {
+            if (radio.value === 'vip' && radio.checked) {
+                normalClick.style.display = "none";
+                slideDown(vipOptions);
+            } else {
+                normalClick.style.display = "block";
+                slideUp(vipOptions);
+            }
+        });
+    });
+
+    durationType.addEventListener('change', function () {
+        const val = this.value;
+        if (val === 'ngay') {
+            durationLabel.textContent = 'Số ngày:';
+            durationInput.min = 3;
+        } else if (val === 'tuan') {
+            durationLabel.textContent = 'Số tuần:';
+            durationInput.min = 1;
+        } else if (val === 'thang') {
+            durationLabel.textContent = 'Số tháng:';
+            durationInput.min = 1;
+        }
+
+        if (parseInt(durationInput.value) < durationInput.min) {
+            durationInput.value = durationInput.min;
+        }
+        updateTotal();
+    });
+
+    durationInput.addEventListener('input', updateTotal);
+
+    document.getElementById("payBtn").addEventListener("click", function () {
+        const type = durationType.value;
+        const value = parseInt(durationInput.value) || 0;
+        const total = prices[type] * value;
+
+        if (value < parseInt(durationInput.min)) {
+            alert(`Giá trị tối thiểu là ${durationInput.min}`);
+            return;
+        }
+
+        if (confirm(`Xác nhận thanh toán ${total.toLocaleString('vi-VN')}đ qua VNPAY?`)) {
+            fetch(`/api/payment/create-vnpay?type=${type}&value=${value}`)
+                .then(res => res.text())
+                .then(url => window.location.href = url)
+                .catch(err => alert("Lỗi tạo URL thanh toán"));
+        }
+    });
+</script>

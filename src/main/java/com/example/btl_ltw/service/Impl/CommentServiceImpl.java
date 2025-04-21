@@ -25,12 +25,19 @@ public class CommentServiceImpl implements CommentService {
     private UserRepository userRepository;
 
     @Override
-    public List<CommentDto> getAllCommentsByRoom_id(long room_id) {
-        List<Comment> comments = commentRepository.getCommentsByRoom_id(room_id);
+    public List<CommentDto> getAllParentCommentsByRoom_id(long room_id) {
+        List<Comment> comments = commentRepository.getParentCommentsByRoom_id(room_id);
         return CommentDto.toDto(comments);
     }
 
     @Override
+    public List<CommentDto> getAllSubCommentsByRoom_id(long room_id) {
+        List<Comment> comments = commentRepository.getSubCommentsByRoom_id(room_id);
+        return CommentDto.toDto(comments);
+    }
+
+    @Override
+    @Transactional
     public void addComment(AddCommentRequest request) {
         // Định dạng thời gian theo kiểu "yyyy-MM-dd HH:mm:ss"
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
@@ -47,7 +54,10 @@ public class CommentServiceImpl implements CommentService {
                 .content(request.getContent())
                 .commentTime(commentTime)
                 .build();
-        comment = commentRepository.save(comment);
+        if (request.getParentCommentId() != 0) {
+            comment.setParentCommentId(request.getParentCommentId());
+        }
+        commentRepository.save(comment);
     }
 
     @Override
@@ -57,6 +67,7 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
+    @Transactional
     public void editComment(String content, Long commentId) {
         commentRepository.updateCommentById(content, commentId);
     }

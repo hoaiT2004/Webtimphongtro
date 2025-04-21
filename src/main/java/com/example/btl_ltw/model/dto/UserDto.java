@@ -3,6 +3,7 @@ package com.example.btl_ltw.model.dto;
 import com.example.btl_ltw.entity.User;
 import lombok.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,6 +32,8 @@ public class UserDto {
 
     private String linkAvatar;
 
+    private Date createdAt;
+
     public static UserDto toDto(User user) {
         if (user == null) {
             return null;
@@ -44,6 +47,7 @@ public class UserDto {
                 .role_id(user.getRole_id())
                 .username(user.getUsername())
                 .linkAvatar(user.getLinkAvatar())
+                .createdAt(user.getCreatedAt())
                 .build();
     }
 
@@ -51,7 +55,7 @@ public class UserDto {
         if (user == null) {
             return null;
         }
-        return User.builder()
+        User u = User.builder()
                 .email(user.getEmail())
                 .fullname(user.getFullname())
                 .password(user.getPassword())
@@ -60,6 +64,8 @@ public class UserDto {
                 .username(user.getUsername())
                 .linkAvatar(user.getLinkAvatar())
                 .build();
+        u.setCreatedAt(user.getCreatedAt());
+        return u;
     }
 
     public static List<UserDto> toDto(List<User> users) {

@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.js"
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <head>
     <meta charset="UTF-8">
@@ -81,12 +82,6 @@
         .rightheader div {
             padding: 10px;
         }
-
-        .webicon {
-            width: 11%;
-            padding: 10px;
-        }
-
         .container {
             width: 80%;
             align-items: center;
@@ -105,11 +100,6 @@
 
         .filter-item button:hover {
             background-color: #002e7a; /* Màu nền khi hover */
-        }
-
-        .detail-container {
-            width: 90%;
-            margin: 0 auto;
         }
 
         body {
@@ -136,17 +126,6 @@
         .border {
             border: 0.5px solid gray;
             border-radius: 7px;
-        }
-
-        .bordertop {
-            border-top: 0;
-            border: 0.5px solid gray;
-            border-radius: 7px 7px 0 0;
-        }
-
-        .borderbottom {
-            border: 0.5px solid gray;
-            border-radius: 0 0 7px 7px;
         }
 
         nav {
@@ -434,6 +413,131 @@
         .pagination button:hover {
             background-color: #003c9d;
         }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+
+        .content-layout {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .user-section {
+            flex: 2;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-section {
+            flex: 1;
+            background: white;
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        /* Nút chọn */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .filter-button {
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            font-size: 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .filter-button:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            transform: scale(1.05);
+        }
+
+        /* Xuất Excel */
+        .export-button {
+            display: inline-block;
+            padding: 10px 15px;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            margin-bottom: 15px;
+        }
+
+        .alert-success {
+            background: #d4edda;
+            color: #155724;
+            padding: 10px;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        /* Bảng */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background: #1266dd;
+            color: white;
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            padding: 10px;
+        }
+
+        /* Phân trang */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .pagination {
+            display: flex;
+            gap: 5px;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li a {
+            display: block;
+            padding: 8px 12px;
+            background: #007bff;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: 0.3s;
+        }
+
+        .pagination li a:hover {
+            background: #0056b3;
+        }
+
+        .pagination .active a {
+            background: #0056b3;
+        }
 
     </style>
 </head>
@@ -469,12 +573,15 @@
     <div>
         <div class="container">
             <ul class="menu flex" id="menu">
-                <li><a  th:href="@{/api/home}">Trang chủ</a></li>
+                <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                 <li th:if="${role == 'Admin'}"><a th:href="@{/admin/UserManagement}">Người dùng</a></li>
                 <li th:if="${role == 'Admin'}"><a class="active" th:href="@{/admin/RoomManagement}">Phòng</a></li>
                 <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                 <li th:if="${role == 'Landlord'}"><a th:href="@{/user/appointment}">Lịch hẹn</a></li>
                 <li th:if="${role == 'Landlord'}"><a th:href="@{/api/room/manage}">Quản lý phòng trọ</a></li>
+                <li th:if="${role == 'Admin'}"><a th:href="@{/admin/RevenueManagement}">Doanh thu</a></li>
+                <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
             </ul>
         </div>
     </div>
@@ -483,34 +590,134 @@
 <div class="container" >
     <section>
         <div style="margin-top: 10px;" class="content">
-            <div class="left border">
-                <h1 class="title">Quản Lý Phòng</h1>
-                <a th:href="@{/admin/printRooms}">Xuất ra Excel</a>
+            <!-- Phần Thống Kê (Bên Phải) -->
+            <div class="stats-section border">
+                <h3>Thống kê phòng trọ</h3>
+
+                <!-- Nút chọn -->
+                <div class="button-group">
+                    <button class="filter-button" onclick="updateChart('week')">📅 Tuần</button>
+                    <button class="filter-button" onclick="updateChart('month')">📆 Tháng</button>
+                    <button class="filter-button" onclick="updateChart('year')">📊 Năm</button>
+                </div>
+
+                <!-- Biểu đồ -->
+                <canvas id="roomChart" width="400" height="200"></canvas>
+            </div>
+            <div class="user-section border">
+                <h1 class="title" style="background-color: #1266dd; color: white; font-style: initial">Quản Lý Phòng</h1>
                 <!-- Thêm thông báo thành công -->
                 <div th:if="${exportSuccess == 'true'}" class="alert alert-success" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;">
                     Xuất Excel thành công!
                 </div>
+                <div class="filter-container container" style="border-color: white">
+                    <form th:action="@{/admin/RoomManagement}" method="GET" class="flex" style="justify-content: space-evenly; margin-top: 20px; margin-bottom: 20px;">
+                        <!-- Lọc theo giá -->
+                        <div class="filter-item">
+                            <label for="price">Giá</label>
+                            <select id="price" name="price" th:value="${request.price}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="1" th:selected="${request.price == '1'}">Dưới 1 triệu</option>
+                                <option value="1-2" th:selected="${request.price == '1-2'}">1 - 2 triệu</option>
+                                <option value="2-3" th:selected="${request.price == '2-3'}">2 - 3 triệu</option>
+                                <option value="3" th:selected="${request.price == '3'}">Trên 3 triệu</option>
+                            </select>
+                        </div>
+
+                        <!-- Lọc theo địa chỉ -->
+                        <div class="filter-item">
+                            <label for="address">Địa chỉ</label>
+                            <select id="address" name="address" th:value="${request.address}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="Biên Giang" th:selected="${request.address == 'Biên Giang'}">Biên Giang</option>
+                                <option value="Dương Nội" th:selected="${request.address == 'Dương Nội'}">Dương Nội</option>
+                                <option value="Đồng Mai" th:selected="${request.address == 'Đồng Mai'}">Đồng Mai</option>
+                                <option value="Hà Cầu" th:selected="${request.address == 'Hà Cầu'}">Hà Cầu</option>
+                                <option value="Kiến Hưng" th:selected="${request.address == 'Kiến Hưng'}">Kiến Hưng</option>
+                                <option value="La Khê" th:selected="${request.address == 'La Khê'}">La Khê</option>
+                                <option value="Mộ Lao" th:selected="${request.address == 'Mộ Lao'}">Mộ Lao</option>
+                                <option value="Nguyễn Trãi" th:selected="${request.address == 'Nguyễn Trãi'}">Nguyễn Trãi</option>
+                                <option value="Phú La" th:selected="${request.address == 'Phú La'}">Phú La</option>
+                                <option value="Phú Lãm" th:selected="${request.address == 'Phú Lãm'}">Phú Lãm</option>
+                                <option value="Phú Lương" th:selected="${request.address == 'Phú Lương'}">Phú Lương</option>
+                                <option value="Phúc La" th:selected="${request.address == 'Phúc La'}">Phúc La</option>
+                                <option value="Quang Trung" th:selected="${request.address == 'Quang Trung'}">Quang Trung</option>
+                                <option value="Vạn Phúc" th:selected="${request.address == 'Vạn Phúc'}">Vạn Phúc</option>
+                                <option value="Văn Quán" th:selected="${request.address == 'Văn Quán'}">Văn Quán</option>
+                                <option value="Yên Nghĩa" th:selected="${request.address == 'Yên Nghĩa'}">Yên Nghĩa</option>
+                                <option value="Yết Kiêu" th:selected="${request.address == 'Yết Kiêu'}">Yết Kiêu</option>
+                            </select>
+
+
+                        </div>
+
+                        <!-- Lọc theo diện tích -->
+                        <div class="filter-item">
+                            <label for="area">Diện tích</label>
+                            <select id="area" name="area" th:value="${request.area}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="20" th:selected="${request.area == '20'}">Dưới 20m²</option>
+                                <option value="20-30" th:selected="${request.area == '20-30'}">20 - 30m²</option>
+                                <option value="30-40" th:selected="${request.area == '30-40'}">30 - 40m²</option>
+                                <option value="40" th:selected="${request.area == '40'}">Trên 40m²</option>
+                            </select>
+                        </div>
+
+                        <!-- Lọc theo kiểu phòng -->
+                        <div class="filter-item">
+                            <label for="roomType">Kiểu phòng</label>
+                            <select id="roomType" name="roomType" th:value="${request.roomType}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="CHUNG_CHU" th:selected="${request.roomType == 'CHUNG_CHU'}">Chung chủ</option>
+                                <option value="KHONG_CHUNG_CHU" th:selected="${request.roomType == 'KHONG_CHUNG_CHU'}">Không chung chủ</option>
+                            </select>
+                        </div>
+
+                        <!-- Lọc theo VIP -->
+                        <div class="filter-item">
+                            <label for="isVip">Trạng thái</label>
+                            <select id="isVip" name="isVip" th:value="${request.isVip}" style="width: 80px">
+                                <option value="">Tất cả</option>
+                                <option value="true" th:selected="${request.isVip == 'true'}">Phòng VIP</option>
+                                <option value="false" th:selected="${request.isVip == 'false'}">Phòng thường</option>
+                            </select>
+                        </div>
+
+                        <!-- Nút lọc -->
+                        <div class="filter-item">
+                            <button type="submit" style="width: 110px; height: 40px; padding: 10px 10px; background-color: #1266dd">Lọc kết quả</button>
+                        </div>
+                    </form>
+                </div>
+                <a th:href="@{/admin/printRooms}">Xuất ra Excel</a>
                 <table>
-                    <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Giá</th>
-                        <th>Địa Chỉ</th>
-                        <th>Diện Tích</th>
-                        <th>Kiểu Phòng</th>
-                        <th>Trạng thái</th>
-                        <th>Hành động</th>
+                    <thead style="background-color: #1266dd">
+                    <tr style="background-color: #1266dd">
+                        <th style="background-color: #1266dd">ID</th>
+                        <th style="background-color: #1266dd">Giá</th>
+                        <th style="background-color: #1266dd;">Điện</th>
+                        <th style="background-color: #1266dd;">Nước</th>
+                        <th style="background-color: #1266dd">Địa Chỉ</th>
+                        <th style="background-color: #1266dd">Diện Tích</th>
+                        <th style="background-color: #1266dd">Kiểu Phòng</th>
+                        <th style="background-color: #1266dd">Trạng thái</th>
+                        <th style="background-color: #1266dd">Hành động</th>
+                        <th style="background-color: #1266dd">Xóa</th>
                     </tr>
                     </thead>
                     <tbody id="roomTable">
                     <tr th:each="room : ${rooms}">
-                        <td th:text="${room.room_id}"></td>
-                        <td th:text="${room.price + ' triệu/tháng'}"></td>
-                        <td th:text="${room.address}"></td>
-                        <td th:text="${room.area + ' m²'}"></td>
-                        <td th:text="${room.roomType}"></td>
-                        <td th:text="${room.isApproval ? 'Đã duyệt' : 'Chưa duyệt'}"></td>
-                        <td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.room_id}" ></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.price + ' triệu/tháng'}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.getElectricityPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.getWaterPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.address}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.area + ' m²'}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.roomType}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.isApproval ? 'Đã duyệt' : 'Chưa duyệt'}"></td>
+                        <td th:if="${room.isVipStatus() != true}" >
                             <!-- Nếu chưa duyệt -->
                             <div th:if="${!room.isApproval}">
                                 <form th:action="@{/admin/approveRoom}" method="post" style="display:inline;">
@@ -527,21 +734,37 @@
                                 <span>Đã duyệt</span>
                             </div>
                         </td>
+
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.room_id}" ></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.price + ' triệu/tháng'}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.getElectricityPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.getWaterPrice()} + ' k/số'">
+                        </td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.address}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.area + ' m²'}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.roomType}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red">Đã duyệt</td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red">
+                            Đã duyệt
+                        </td>
+
+                        <td><a th:href="@{'/admin/remove/room?roomId='+${room.getRoom_id()}}">Xóa</a></td>
                     </tr>
                     </tbody>
                 </table>
                 <div class="box-footer clearfix">
                     <ul class="pagination pagination-sm no-margin pull-right">
                         <li th:if="${currentPage > 1}">
-                            <a th:href="@{'/admin/RoomManagement?pageNo=' + ${currentPage - 1}}"><<</a>
+                            <a th:href="@{'/admin/RoomManagement?pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
                         </li>
                         <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                                   th:classappend="${currentPage == i ? 'active' : ''}">
-                        <a th:href="@{'/admin/RoomManagement?pageNo=' + ${i}}" th:text="${i}">
+                        <a th:href="@{'/admin/RoomManagement?pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
                             </a>
                         </li>
                         <li th:if="${currentPage < totalPage}">
-                            <a th:href="@{'/admin/RoomManagement?pageNo=' + ${currentPage + 1}}">>>
+                            <a th:href="@{'/admin/RoomManagement?pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
                             </a>
                         </li>
                     </ul>
@@ -549,21 +772,67 @@
 
             </div>
             </div>
-
-            <div class="right border bg-white">
-                <h3 class="subject">Tin mới đăng</h3>
-                <ul class="flex v-menu">
-                    <li><a href="/api/home/news_1">Những lưu ý khi thuê trọ</a></li>
-                    <li><a href="/api/home/news_2">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>
-                    <li><a href="/api/home/nenthuenhaodau">Nên thuê nhà ở đâu</a></li>
-                    <li><a href="/api/home/nhadephon">Làm sao để nhà đẹp hơn</a></li>
-                </ul>
-            </div>
             <div class="right-no-border"></div>
             <div class="right-no-border"></div>
         </div>
     </section>
 </div>
+<script th:inline="javascript">
+    // Nhận dữ liệu từ Thymeleaf
+    const weekStats = JSON.parse([[${weekStats}]]);
+    const monthStats = JSON.parse([[${monthStats}]]);
+    const yearStats = JSON.parse([[${yearStats}]]);
 
+    // Nhãn cho biểu đồ
+    const labels = {
+        week: ["6 tuần trước", "5 tuần trước", "4 tuần trước", "3 tuần trước", "2 tuần trước", "Tuần trước", "Tuần này"],
+        month: ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6',
+            'Tháng 7', 'Tháng 8', 'Tháng 9', 'Tháng 10', 'Tháng 11', 'Tháng 12'],
+        year: Object.keys(yearStats).sort((a, b) => a - b) // Sắp xếp năm tăng dần
+    };
+
+    // Chọn dữ liệu mặc định
+    let currentType = "month";
+    let currentData = Object.values(monthStats);
+    let currentLabels = labels.month;
+
+    // Khởi tạo biểu đồ Chart.js
+    const ctx = document.getElementById('roomChart').getContext('2d');
+    const roomChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: currentLabels,
+            datasets: [{
+                label: 'Số lượng phòng',
+                data: currentData,
+                backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                borderColor: 'rgba(75, 192, 192, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: { beginAtZero: true }
+            }
+        }
+    });
+
+    // Hàm cập nhật biểu đồ khi chọn thời gian
+    function updateChart(type) {
+        let newData;
+
+        if (type === 'week') {
+            newData = Object.values(weekStats);
+        } else if (type === 'month') {
+            newData = Object.values(monthStats);
+        } else { // 'year'
+            newData = Object.values(yearStats);
+        }
+
+        roomChart.data.labels = labels[type];
+        roomChart.data.datasets[0].data = newData;
+        roomChart.update();
+    }
+</script>
 </body>
 </html>

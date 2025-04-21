@@ -28,6 +28,8 @@ public class CommentDto {
 
     private long room_id;
 
+    private long parentCommentId;
+
     public static CommentDto toDto(Comment comment) {
         if (comment == null) {
             return null;
@@ -40,6 +42,7 @@ public class CommentDto {
                 .content(comment.getContent())
                 .username(comment.getUsername())
                 .avatar(comment.getAvatar())
+                .parentCommentId(comment.getParentCommentId())
                 .build();
         return commentDto;
     }
@@ -55,6 +58,7 @@ public class CommentDto {
                 .content(commentDto.getContent())
                 .username(commentDto.getUsername())
                 .avatar(commentDto.getAvatar())
+                .parentCommentId(commentDto.getParentCommentId())
                 .build();
         return comment;
     }

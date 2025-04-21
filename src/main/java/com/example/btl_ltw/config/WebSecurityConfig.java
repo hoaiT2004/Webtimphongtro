@@ -55,20 +55,15 @@ public class WebSecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity https, HttpServletRequest request) throws Exception {
         https
                 .authorizeHttpRequests()
-                .requestMatchers("/swagger-ui/**", "/v2/api-docs", "/swagger-resources/**", "/webjars/**")
-                .permitAll()
-                .requestMatchers("/api/home/*", "/api/home", "/user/sendEmailAgain","/user/register","/user/login","/user/retrievePassword", "/api/room", "/user/createNewPassword")
+                .requestMatchers( "/v3/api-docs/**",
+                        "/swagger-ui/**",
+                        "/swagger-ui.html","/api/payment/payment-return", "https://982b-103-238-68-84.ngrok-free.app/api/payment/payment-return","/api/home/*", "/api/home", "/user/sendEmailAgain","/user/register","/user/login","/user/retrievePassword", "/api/room", "/user/createNewPassword")
                 .permitAll()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                 .permitAll()
                 .requestMatchers("/admin/*").hasAuthority("Admin")
-                .requestMatchers("/user/schedule").hasAuthority("Tenant")
-                .requestMatchers("/api/room/schedule").hasAuthority("Tenant")
-                .requestMatchers("/api/comment/add").hasAuthority("Tenant")
+                .requestMatchers("/api/room/addStar", "/room/favorites", "/room/{roomId}/*", "/user/schedule", "/api/comment/add", "/api/room/schedule", "/api/comment/confirmEdit", "/api/comment/edit").hasAuthority("Tenant")
                 .requestMatchers("/api/comment/remove").hasAnyAuthority("Tenant", "Landlord")
-                .requestMatchers("/api/comment/confirmEdit").hasAuthority("Tenant")
-                .requestMatchers("/api/comment/edit").hasAuthority("Tenant")
-                .requestMatchers("/room/favorites", "/room/{roomId}/*").hasAuthority("Tenant")
                 .requestMatchers("/landlord/*").hasAuthority("Landlord")
                 .anyRequest()
                 .authenticated()

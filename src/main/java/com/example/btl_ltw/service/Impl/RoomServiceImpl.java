@@ -22,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @Service
 public class RoomServiceImpl implements RoomService {
@@ -45,18 +47,6 @@ public class RoomServiceImpl implements RoomService {
     @Autowired
     private AppointmentRepository appointmentRepository;
 
-//    @Override
-//    public List<RoomDto> getAllRoomByUser(String username) {
-//        Optional<User> user = userRepository.findUserByUsername(username);
-//        List<Room> rooms = roomRepository.findAllByUserid(user.get().getId());
-//        List<RoomDto> roomDtos = new ArrayList<>();
-//        for (Room room : rooms) {
-//            RoomDto roomDto = RoomDto.toDto(room);
-//            roomDtos.add(roomDto);
-//        }
-//        return roomDtos;
-//    }
-
     @Override
     public void deleteRoomByRoomId(Long room_id) {
         imageRepository.deleteAllImagesByRoomId(room_id);
@@ -65,32 +55,19 @@ public class RoomServiceImpl implements RoomService {
         roomRepository.deleteById(room_id);
     }
 
-    @Override
-    public Page<Room> getRoomsByUser(String isApproval, String username, Pageable pageable) {
-        Optional<User> user = userRepository.findUserByUsername(username);
-        return roomRepository.getUsersByUserId(isApproval, user.get().getId(), pageable);
-    }
-
-    @Override
-    public Page<Room> getAllRoomsByUser(String username, Pageable pageable) {
-        Optional<User> user = userRepository.findUserByUsername(username);
-        return roomRepository.getAllUsersByUserId(user.get().getId(), pageable);
-    }
-
     @Modifying
     @Transactional
     @Override
-    public void updateRoom(RoomDto roomDto, Authentication auth, List<MultipartFile> imagesAdd, List<Long> imageIdsDel) {
-        Room room = RoomDto.toRoom(roomDto);
-        room.setIsApproval("false");
+    public void updateRoom(RoomDto roomDto, Authentication auth, List<MultipartFile> imagesAdd, List<Long> imageIdsDel) throws ExecutionException, InterruptedException {
         Room oldroom = roomRepository.findById(roomDto.getRoom_id()).orElse(null);
-        room.setId(roomDto.getRoom_id());
-        room.setCreatedAt(oldroom.getCreatedAt());
-        if (auth != null) {
-            String username = auth.getName();
-            Optional<User> user = userRepository.findUserByUsername(username);
-            room.setUser_id(user.get().getId());
+        if (!oldroom.isVipStatus()) {
+            oldroom.setIsApproval("false");
         }
+        oldroom.setWaterPrice(roomDto.getWaterPrice());
+        oldroom.setElectricityPrice(roomDto.getElectricityPrice());
+        oldroom.setAddress(roomDto.getAddress());
+        oldroom.setArea(roomDto.getArea());
+        oldroom.setRoomType(RoomType.valueOf(roomDto.getRoomType()));
 
         commentRepository.deleteCommentsByRoom_id(roomDto.getRoom_id());
         appointmentRepository.deleteAppointmentByRoom_id(roomDto.getRoom_id());
@@ -98,8 +75,8 @@ public class RoomServiceImpl implements RoomService {
         if (imageIdsDel != null) {
             for (Long id : imageIdsDel) {
                 Optional<Image> image = imageRepository.findById(id);
-                if (room.getImage().equals(image.get().getUrl())) {
-                    room.setImage("");
+                if (oldroom.getImage().equals(image.get().getUrl())) {
+                    oldroom.setImage("");
                     break;
                 }
             }
@@ -115,26 +92,29 @@ public class RoomServiceImpl implements RoomService {
 
                 // Nếu file không rỗng, tải lên Cloudinary
                 Image image = new Image();
-                image.setRoom_id(room.getId());
-                String imageUrl = fileService.uploadFile(file); // Tải file lên Cloudinary
+                image.setRoom_id(oldroom.getId());
+                CompletableFuture<String> futureUrl = fileService.uploadFile(file);
+                String imageUrl = futureUrl.get();
+                // Tải file lên Cloudinary
                 image.setUrl(imageUrl);
                 imageRepository.save(image);
             }
         }
 
-        if (room.getImage().equals(null) || room.getImage().equals("")) {
-            List<String> images = imageRepository.findAllImagesByRoom_id(room.getId());
-            room.setImage(images.get(0));//luu anh vao roomentity
+        if (oldroom.getImage().equals(null) || oldroom.getImage().equals("")) {
+            List<String> images = imageRepository.findAllImagesByRoom_id(oldroom.getId());
+            oldroom.setImage(images.get(0));//luu anh vao roomentity
         }
-        roomRepository.save(room);
+        roomRepository.save(oldroom);
     }
 
 
     @Override
-    public Page<Room> getAllRoomByManyContraints(RoomFilterDataRequest request, Pageable pageable) {
+    public Page<Room> getAllNormalRoomByManyContraints(RoomFilterDataRequest request, Pageable pageable) {
         Page<Room> roomPage;
+        boolean vipStatus = false;
         if (request.isNull()) {
-            roomPage = roomRepository.findAllByIsApproval(isApproval, pageable);
+            roomPage = roomRepository.findAllByIsApprovalAndVipStatus(isApproval, vipStatus, pageable);
         } else {
             RoomType roomType;
             try {
@@ -142,7 +122,42 @@ public class RoomServiceImpl implements RoomService {
             } catch (Exception ex) {
                 roomType = null;
             }
-            roomPage = roomRepository.findAllByFilterConstraints(request.getPrice(), request.getAddress(), request.getArea(), roomType, pageable);
+            roomPage = roomRepository.findAllByFilterConstraints(request.getPrice(), request.getAddress(), request.getArea(), roomType, vipStatus, pageable);
+        }
+        return roomPage;
+    }
+
+    @Override
+    public Page<Room> getAllVipRoomByManyContraints(RoomFilterDataRequest request, Pageable pageable) {
+        Page<Room> roomPage;
+        boolean vipStatus = true;
+        if (request.isNull()) {
+            roomPage = roomRepository.findAllByIsApprovalAndVipStatus(isApproval, vipStatus, pageable);
+        } else {
+            RoomType roomType;
+            try {
+                roomType = RoomTypeConverter.convertToEntityAttributeGlobal(request.getRoomType());
+            } catch (Exception ex) {
+                roomType = null;
+            }
+            roomPage = roomRepository.findAllByFilterConstraints(request.getPrice(), request.getAddress(), request.getArea(), roomType, vipStatus, pageable);
+        }
+        return roomPage;
+    }
+
+    @Override
+    public Page<Room> getAllRoomByManyContraintsAndUsername(RoomFilterDataRequest request, String username, Pageable pageable) {
+        Page<Room> roomPage;
+        if (request.isNull()) {
+            roomPage = roomRepository.findAllByUsername(username, pageable);
+        } else {
+            RoomType roomType;
+            try {
+                roomType = RoomTypeConverter.convertToEntityAttributeGlobal(request.getRoomType());
+            } catch (Exception ex) {
+                roomType = null;
+            }
+            roomPage = roomRepository.findAllByFilterConstraintsAndUsername(request.getPrice(), request.getAddress(), request.getArea(), roomType, username, pageable);
         }
         return roomPage;
     }
@@ -160,36 +175,26 @@ public class RoomServiceImpl implements RoomService {
     @Modifying
     @Override
     @Transactional
-    public void addRoom(RoomDto roomDto, List<MultipartFile> images, Authentication auth) {
+    public void addRoom(RoomDto roomDto, List<String> images, String username) {
         Room room = RoomDto.toRoom(roomDto);
-        room.setIsApproval("false");
-        if (auth != null) {
-            String username = auth.getName();
-            Optional<User> user = userRepository.findUserByUsername(username);
-            room.setUser_id(user.get().getId());
+        if (!room.isVipStatus()) {
+            room.setIsApproval("false");
+        } else {
+            room.setIsApproval("true");
         }
 
-
-        room.setImage(fileService.uploadFile((MultipartFile) images.get(0)));//luu anh vao roomentity
+        Optional<User> user = userRepository.findUserByUsername(username);
+        room.setUser_id(user.get().getId());
+        room.setImage(images.get(0));//luu anh vao roomentity
         roomRepository.save(room);
-        Image roomImage = new Image();
-        roomImage.setRoom_id(room.getId());
-        roomImage.setUrl(room.getImage());
-        imageRepository.save(roomImage);
-        for (int i = 1; i < images.size(); i++) {//luu anh vao bang image
+
+        for (int i = 0; i < images.size(); i++) {//luu anh vao bang image
             Image image = new Image();
             image.setRoom_id(room.getId());
-            String imageUrl = fileService.uploadFile(images.get(i));
+            String imageUrl = images.get(i);
             image.setUrl(imageUrl);
             imageRepository.save(image);
         }
-        roomRepository.save(room);
-    }
-
-    @Override
-    public Page<Room> getAllRoomsForAdmin(Pageable pageable) {
-//        return roomRepository.findAll(pageable);
-        return roomRepository.getAllOrderByCreatedAtForAdmin(pageable);
     }
 
     @Override
@@ -210,8 +215,31 @@ public class RoomServiceImpl implements RoomService {
 
     @Override
     public List<RoomDto> getAllRoom() {
-        List<Room> rooms = roomRepository.findAll();
+        List<Room> rooms = roomRepository.findAllRooms();
         return RoomDto.toDto(rooms);
+    }
+
+    @Override
+    public void addView(long roomId) {
+        roomRepository.addViews(roomId);
+    }
+
+    @Override
+    public Page<Room> getAllRoomsWithManyContraintsForAdmin(RoomFilterDataRequest request, Pageable pageable) {
+        Page<Room> roomPage;
+        if (request.isNull() && request.emptyVip()) {
+            roomPage = roomRepository.findAll(pageable);
+        } else {
+            request.setVip();
+            RoomType roomType;
+            try {
+                roomType = RoomTypeConverter.convertToEntityAttributeGlobal(request.getRoomType());
+            } catch (Exception ex) {
+                roomType = null;
+            }
+            roomPage = roomRepository.findAllByFilterConstraintsForAdmin(request.getPrice(), request.getAddress(), request.getArea(), roomType, request.getIsVipBool(), pageable);
+        }
+        return roomPage;
     }
 
 }

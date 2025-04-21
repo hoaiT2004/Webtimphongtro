@@ -14,9 +14,14 @@ import java.util.List;
 public interface CommentRepository extends JpaRepository<Comment, Long> {
 
     @Query("SELECT c FROM Comment AS c " +
-            "WHERE c.room_id = :room_id " +
-            "ORDER BY c.commentTime desc")
-    List<Comment> getCommentsByRoom_id(@Param("room_id") long room_id);
+            "WHERE c.room_id = :room_id AND c.parentCommentId = 0 " +
+            "ORDER BY c.commentTime")
+    List<Comment> getParentCommentsByRoom_id(@Param("room_id") long room_id);
+
+    @Query("SELECT c FROM Comment AS c " +
+            "WHERE c.room_id = :room_id AND c.parentCommentId != 0 " +
+            "ORDER BY c.commentTime")
+    List<Comment> getSubCommentsByRoom_id(@Param("room_id") long room_id);
 
     @Query("UPDATE Comment AS c " +
             "SET c.content = :content " +

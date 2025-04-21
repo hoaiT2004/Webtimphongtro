@@ -36,13 +36,19 @@ public class HomeController {
         }
     }
 
+    @GetMapping("/priceMenu")
+    public String showPriceMenu(Authentication authentication, Model model) {
+        func_common(authentication, model);
+        return "priceMenu";
+    }
+
     @GetMapping
-    public String home(Authentication authentication, Model model,
+    public String normalRoom(Authentication authentication, Model model,
                        @ModelAttribute RoomFilterDataRequest request
             , @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         func_common(authentication, model);
         Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
-        Page<Room> roomPage = roomService.getAllRoomByManyContraints(request, pageable);
+        Page<Room> roomPage = roomService.getAllNormalRoomByManyContraints(request, pageable);
         List<Room> roomList = new LinkedList<>();
         roomPage.forEach(roomList::add);
         model.addAttribute("rooms", RoomDto.toDto(roomList));
@@ -52,6 +58,24 @@ public class HomeController {
         // Lưu trạng thái lọc khi chuyển trang
         model.addAttribute("request", request);
         return "index";
+    }
+
+    @GetMapping("/vipRoom")
+    public String vipRoom(Authentication authentication, Model model,
+                             @ModelAttribute RoomFilterDataRequest request
+            , @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
+        func_common(authentication, model);
+        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Page<Room> roomPage = roomService.getAllVipRoomByManyContraints(request, pageable);
+        List<Room> roomList = new LinkedList<>();
+        roomPage.forEach(roomList::add);
+        model.addAttribute("rooms", RoomDto.toDto(roomList));
+        model.addAttribute("currentPage", pageNo);
+        model.addAttribute("totalPage", roomPage.getTotalPages() == 0 ? 1 : roomPage.getTotalPages());
+
+        // Lưu trạng thái lọc khi chuyển trang
+        model.addAttribute("request", request);
+        return "vipRoom";
     }
 
 

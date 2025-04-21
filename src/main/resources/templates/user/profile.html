@@ -486,13 +486,16 @@
         <div>
             <div class="container2">
                 <ul class="menu flex" id="menu">
-                    <li><a class="active" th:href="@{/api/home}">Trang chủ</a></li>
+                    <li><a class="active" th:href="@{/api/home}">Nhà trọ,phòng trọ</a></li>
+                    <li><a th:href="@{/api/home/vipRoom}">Phòng nổi bật</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/UserManagement">Người dùng</a></li>
                     <li th:if="${role == 'Admin'}"><a href="/admin/RoomManagement">Phòng</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/user/schedule}">Lịch xem phòng</a></li>
                     <li th:if="${role == 'Tenant'}"><a th:href="@{/room/favorites}">Phòng yêu thích</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/appointment}">Lịch hẹn</a></li>
                     <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/manage}">Quản lý phòng trọ</a></li>
+                    <li th:if="${role == 'Landlord'}"><a th:href="@{/landlord/transaction}">Lịch sử giao dịch</a></li>
+                    <li><a th:href="@{/api/home/priceMenu}">Bảng giá</a></li>
                 </ul>
             </div>
         </div>
@@ -529,7 +532,7 @@
                 <label for="tel">Tel:</label>
                 <input type="tel" id="tel" name="tel" th:value="${tel}" pattern="^0\d{9,11}$" title="Telephone number must be between 10 and 12 digits
                             and start with zero number" required><span id="inform" style="color: red"></span><br>
-                <input style="background-color: red;border-color: white;color: white;width: 10%;height: 30px" type="submit" id="submitInfo" value="Save">
+                <input style="background-color: #1266dd;border-color: white;color: white;width: 10%;height: 30px" type="submit" id="submitInfo" value="Save">
             </form>
 
         </section>
@@ -543,7 +546,7 @@
                 </label>
                 <p>Dụng lượng file tối đa 1 MB</p>
                 <p>Định dạng:.JPEG, .PNG</p>
-                <input type="submit" id="submit" value="Upload" style="border-color: white;color: white;height: 30px;width: 40%;;background-color: green">
+                <input type="submit" id="submit" value="Upload" style="border-color: white;color: white;height: 30px;width: 40%;background-color: #1266dd">
             </form>
         </aside>
     </div>
