@@ -19,8 +19,16 @@ public class RedisService {
         redisTemplate.opsForValue().set("room:" + txnRef, roomDto, timeoutInMinutes, TimeUnit.MINUTES);
     }
 
+    public void saveRoomID(String txnRef, Long roomID, long timeoutInMinutes) {
+        redisTemplate.opsForValue().set("roomID:" + txnRef, Long.parseLong(roomID+""), timeoutInMinutes, TimeUnit.MINUTES);
+    }
+
     public RoomDto getRoom(String txnRef) {
         return (RoomDto) redisTemplate.opsForValue().get("room:" + txnRef);
+    }
+
+    public Integer getRoomID(String txnRef) {
+        return (Integer) redisTemplate.opsForValue().get("roomID:" + txnRef);
     }
 
     public void saveUser(String txnRef, String username, long timeoutInMinutes) {
@@ -42,6 +50,11 @@ public class RedisService {
     public void delete(String txnRef) {
         redisTemplate.delete("room:" + txnRef);
         redisTemplate.delete("images:" + txnRef);
+        redisTemplate.delete("user:" + txnRef);
+    }
+
+    public void deleteForUpgradeTask(String txnRef) {
+        redisTemplate.delete("roomID:" + txnRef);
         redisTemplate.delete("user:" + txnRef);
     }
 }

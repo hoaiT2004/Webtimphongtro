@@ -38,4 +38,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query("SELECT u FROM User u")
     List<User> findAllUser();
+
+    @Query("SELECT r.password FROM User r WHERE r.username = :username")
+    String loadPasswordByUsername(String username); //Use for unit test
 }

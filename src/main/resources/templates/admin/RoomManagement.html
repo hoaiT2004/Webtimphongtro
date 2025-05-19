@@ -689,7 +689,14 @@
                         </div>
                     </form>
                 </div>
-                <a th:href="@{/admin/printRooms}">Xuất ra Excel</a>
+                <a th:href="@{/admin/printRooms}" class="left border">Xuất ra Excel</a>
+                <br>
+                <label for="pageSize">Hiển thị:</label>
+                <select id="pageSize" name="pageSize" onchange="filterByPageSize(this)">
+                    <option value="10" th:selected="${pageSize == '10'}">10 hàng</option>
+                    <option value="20" th:selected="${pageSize == '20'}">20 hàng</option>
+                    <option value="30" th:selected="${pageSize == '30'}">30 hàng</option>
+                </select>
                 <table>
                     <thead style="background-color: #1266dd">
                     <tr style="background-color: #1266dd">
@@ -700,7 +707,6 @@
                         <th style="background-color: #1266dd">Địa Chỉ</th>
                         <th style="background-color: #1266dd">Diện Tích</th>
                         <th style="background-color: #1266dd">Kiểu Phòng</th>
-                        <th style="background-color: #1266dd">Trạng thái</th>
                         <th style="background-color: #1266dd">Hành động</th>
                         <th style="background-color: #1266dd">Xóa</th>
                     </tr>
@@ -716,7 +722,6 @@
                         <td th:if="${room.isVipStatus() != true}" th:text="${room.address}"></td>
                         <td th:if="${room.isVipStatus() != true}" th:text="${room.area + ' m²'}"></td>
                         <td th:if="${room.isVipStatus() != true}" th:text="${room.roomType}"></td>
-                        <td th:if="${room.isVipStatus() != true}" th:text="${room.isApproval ? 'Đã duyệt' : 'Chưa duyệt'}"></td>
                         <td th:if="${room.isVipStatus() != true}" >
                             <!-- Nếu chưa duyệt -->
                             <div th:if="${!room.isApproval}">
@@ -744,27 +749,26 @@
                         <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.address}"></td>
                         <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.area + ' m²'}"></td>
                         <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.roomType}"></td>
-                        <td th:if="${room.isVipStatus() == true}" style="color: red">Đã duyệt</td>
                         <td th:if="${room.isVipStatus() == true}" style="color: red">
                             Đã duyệt
                         </td>
 
-                        <td><a th:href="@{'/admin/remove/room?roomId='+${room.getRoom_id()}}">Xóa</a></td>
+                        <td><a class="btn btn-danger" th:href="@{'/admin/remove/room?roomId='+${room.getRoom_id()}}">Xóa</a></td>
                     </tr>
                     </tbody>
                 </table>
                 <div class="box-footer clearfix">
                     <ul class="pagination pagination-sm no-margin pull-right">
                         <li th:if="${currentPage > 1}">
-                            <a th:href="@{'/admin/RoomManagement?pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
+                            <a th:href="@{'/admin/RoomManagement?pageSize='+${pageSize} +'&pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
                         </li>
                         <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                                   th:classappend="${currentPage == i ? 'active' : ''}">
-                        <a th:href="@{'/admin/RoomManagement?pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
+                        <a th:href="@{'/admin/RoomManagement?pageSize='+${pageSize} +'&pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
                             </a>
                         </li>
                         <li th:if="${currentPage < totalPage}">
-                            <a th:href="@{'/admin/RoomManagement?pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
+                            <a th:href="@{'/admin/RoomManagement?pageSize='+${pageSize} +'&pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
                             </a>
                         </li>
                     </ul>
@@ -832,6 +836,18 @@
         roomChart.data.labels = labels[type];
         roomChart.data.datasets[0].data = newData;
         roomChart.update();
+    }
+</script>
+<script>
+     function filterByPageSize(selectElement) {
+        const selectedPageSize = selectElement.value;
+         const price = '[[${request.price}]]';
+         const address = '[[${request.address}]]';
+         const area = '[[${request.area}]]';
+         const roomType = '[[${request.roomType}]]';
+        const baseUrl = window.location.pathname; // giữ nguyên URL hiện tại
+        const url = `${baseUrl}?pageSize=${selectedPageSize}&price=${price}&address=${address}&area=${area}&roomType=${roomType}`;
+        window.location.href = url;
     }
 </script>
 </body>

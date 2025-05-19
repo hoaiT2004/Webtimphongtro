@@ -32,20 +32,20 @@ public class FavoriteRoomController {
     @Autowired
     private UserService userService;
 
-    private static final int sizeOfPage = 5;
-
     @GetMapping("/favorites")
     public String showFavoriteRooms(Model model, Authentication auth,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,
                                     @ModelAttribute RoomFilterDataRequest request
                                     , @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         func_common(auth, model);
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
         UserDto user = userService.findUserByUsername(auth.getName());
         Page<Room> roomPage = favoriteRoomService.getFavoriteRoomsByManyContraints(request, pageable, user.getId());
         List<Room> roomList = new LinkedList<>();
         roomPage.forEach(roomList::add);
         model.addAttribute("rooms", RoomDto.toDto(roomList));
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", sizeOfPage);
         model.addAttribute("totalPage", roomPage.getTotalPages() == 0 ? 1 : roomPage.getTotalPages());
         model.addAttribute("request", request);
 

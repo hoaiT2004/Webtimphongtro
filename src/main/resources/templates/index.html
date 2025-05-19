@@ -464,23 +464,7 @@
 
                     </div>
                 </div>
-                <!-- Chatbox Icon -->
-                <div id="chatbox-icon">
-                    <img src="https://cdn-icons-png.flaticon.com/512/599/599995.png" alt="Chat" onclick="toggleChatbox()">
-                </div>
 
-                <!-- Chatbox Popup -->
-                <div id="chatbox">
-                    <div class="chat-header">
-                        <span>Chatbot Tìm Phòng</span>
-                        <button onclick="toggleChatbox()">×</button>
-                    </div>
-                    <div class="chat-body">
-                        <div id="chat-messages"></div>
-                        <input type="text" id="chat-input" placeholder="Nhập tin nhắn...">
-                        <button onclick="sendMessage()">Gửi</button>
-                    </div>
-                </div>
 
                 <div class="right border bg-white">
                     <h3 class="subject">Tin mới đăng</h3>
@@ -500,95 +484,5 @@
     </div>
 
 </body>
-<style>
-    /* Icon chatbox ở góc phải */
-    #chatbox-icon {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        cursor: pointer;
-        z-index: 1000;
-    }
-    #chatbox-icon img {
-        width: 60px;
-        height: 60px;
-        border-radius: 50%;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
-
-    /* Giao diện chatbox */
-    #chatbox {
-        position: fixed;
-        bottom: 80px;
-        right: 20px;
-        width: 300px;
-        background: white;
-        border-radius: 10px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        display: none;
-        z-index: 1000;
-    }
-    .chat-header {
-        background: #007bff;
-        color: white;
-        padding: 10px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        border-top-left-radius: 10px;
-        border-top-right-radius: 10px;
-    }
-    .chat-body {
-        padding: 10px;
-    }
-    #chat-messages {
-        height: 200px;
-        overflow-y: auto;
-        border-bottom: 1px solid #ddd;
-        margin-bottom: 10px;
-    }
-    .chat-body input {
-        width: 70%;
-        padding: 5px;
-    }
-    .chat-body button {
-        width: 25%;
-        background: #007bff;
-        color: white;
-        border: none;
-        padding: 5px;
-        cursor: pointer;
-    }
-
-</style>
-<script>
-    function toggleChatbox() {
-        let chatbox = document.getElementById("chatbox");
-        chatbox.style.display = (chatbox.style.display === "block") ? "none" : "block";
-    }
-
-    function sendMessage() {
-        let inputField = document.getElementById("chat-input");
-        let message = inputField.value.trim();
-        if (message === "") return;
-
-        let chatMessages = document.getElementById("chat-messages");
-        chatMessages.innerHTML += "<p><strong>Bạn:</strong> " + message + "</p>";
-
-        // Gửi tin nhắn đến API chatbot
-        fetch('/api/chatbot/query', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ message: message })
-        })
-            .then(response => response.text())
-            .then(data => {
-                chatMessages.innerHTML += "<p><strong>Bot:</strong> " + data + "</p>";
-                chatMessages.scrollTop = chatMessages.scrollHeight; // Cuộn xuống tin nhắn mới
-            });
-
-        inputField.value = "";
-    }
-</script>
 
 </html>

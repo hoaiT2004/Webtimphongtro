@@ -43,8 +43,6 @@ public class UserController {
     @Autowired
     private AppointmentService appointmentService;
 
-    private static final int sizeOfPage = 5;
-
 
     @GetMapping("/login")
     public String login(){
@@ -112,6 +110,14 @@ public class UserController {
         return "user/changePassword";
     }
 
+    @PostMapping("/changePassword")
+    public String changePassword(@ModelAttribute ChangePasswordRequest request, Authentication authentication) {
+        if (authentication != null) {
+            userService.changePassword(request, authentication.getName());
+        }
+        return "redirect:/user/profile";
+    }
+
     private String encodeEmail(String email) {
         StringBuilder encodedEmail = new StringBuilder();
         encodedEmail.append(email.substring(0,5)).append("*".repeat(email.length() - 15))
@@ -127,13 +133,6 @@ public class UserController {
         return otp.toString();
     }
 
-    @PostMapping("/changePassword")
-    public String changePassword(@ModelAttribute ChangePasswordRequest request, Authentication authentication) {
-        if (authentication != null) {
-            userService.changePassword(request, authentication.getName());
-        }
-        return "redirect:/user/profile";
-    }
 
     @GetMapping("/retrievePassword")
     public String retrievePassword() {
@@ -193,33 +192,35 @@ public class UserController {
 
     @GetMapping("/schedule")
     public String showRoomViewingSchedule(Authentication auth, Model model,
+                                          @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,
                                           @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) throws ParseException {
         commonFunc(auth, model);
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
         Page<Appointment> pages = appointmentService.getAllByUsername(auth.getName(), pageable);
-        commonFunc2(model, pageNo, pages);
+        commonFunc2(model, pageNo, pages, sizeOfPage);
         return "user/roomViewingSchedule";
     }
 
     @GetMapping("/deleteSchedule")
-    public String deleteRoomViewingSchedule(@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
+    public String deleteRoomViewingSchedule(@RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,@RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
                                             @RequestParam(name = "scheduleId") Long appointmentId) throws ParseException {
         appointmentService.deleteScheduleById(appointmentId);
-        return "redirect:/user/schedule?pageNo="+pageNo;
+        return "redirect:/user/schedule?pageNo="+pageNo+"&pageSize="+sizeOfPage;
     }
 
     @PostMapping("/updateSchedule")
     public String updateSchedule(@ModelAttribute UpdateScheduleRequest request,
-                                 @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {
+                                 @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,@RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {
         appointmentService.updateAppointment(request);
-        return "redirect:/user/schedule?pageNo="+pageNo;
+        return "redirect:/user/schedule?pageNo="+pageNo+"&pageSize="+sizeOfPage;
     }
 
-    private void commonFunc2(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Page<Appointment> pages) {
+    private void commonFunc2(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Page<Appointment> pages, @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage) {
         List<Appointment> dtoList = new ArrayList<>();
         pages.forEach(dtoList::add);
         model.addAttribute("Appointments", AppointmentDto.toDto(dtoList));
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", sizeOfPage);
         model.addAttribute("totalPage", pages.getTotalPages() == 0 ? 1 : pages.getTotalPages());
     }
 

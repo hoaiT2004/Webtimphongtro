@@ -78,32 +78,26 @@ public class HomeController {
         return "vipRoom";
     }
 
-
-    @GetMapping("/UserManagement")
-    public String usermanagement() {
-        return "UserManagement";
-    }
-
     @GetMapping("/news_1")
-    public String notice(Authentication authentication, Model model) {
+    public String post1(Authentication authentication, Model model) {
         func_common(authentication, model);
         return "news_1";
     }
 
     @GetMapping("/news_2")
-    public String dang_song(Authentication authentication, Model model) {
+    public String post2(Authentication authentication, Model model) {
         func_common(authentication, model);
         return "news_2";
     }
 
     @GetMapping("/news_3")
-    public String post1(Authentication authentication, Model model) {
+    public String post3(Authentication authentication, Model model) {
         func_common(authentication, model);
         return "news_3";
     }
 
     @GetMapping("/news_4")
-    public String post2(Authentication authentication, Model model) {
+    public String post4(Authentication authentication, Model model) {
         func_common(authentication, model);
         return "news_4";
     }

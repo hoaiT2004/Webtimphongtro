@@ -104,6 +104,7 @@ public class RoomDto {
                 .vipStatus(room.isVipStatus())
                 .build();
         res.setCreatedAt(room.getCreatedAt());
+        res.setId(room.getRoom_id());
         return res;
     }
 

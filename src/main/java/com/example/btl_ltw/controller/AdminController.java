@@ -51,8 +51,6 @@ public class AdminController {
     @Autowired
     private PaymentService paymentService;
 
-    private static final int sizeOfPage = 5;
-
 
     private void func_common(Authentication authentication, Model model) {
         if (authentication != null) {
@@ -64,18 +62,20 @@ public class AdminController {
     }
 
     @GetMapping("/RoomManagement")
-    public String home(Authentication authentication, Model model,
-                       @ModelAttribute RoomFilterDataRequest request,
-                       @RequestParam(name = "exportSuccess", defaultValue = "false") String exportSuccess
+    public String roomManagement(Authentication authentication, Model model,
+                                 @ModelAttribute RoomFilterDataRequest request,
+                                 @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,
+                                 @RequestParam(name = "exportSuccess", defaultValue = "false") String exportSuccess
             , @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) throws JsonProcessingException {
         func_common(authentication, model);
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
         Page<Room> roomPage = roomService.getAllRoomsWithManyContraintsForAdmin(request, pageable);
         List<Room> roomList = new ArrayList<>();
         roomPage.forEach(roomList::add);
 
         model.addAttribute("rooms", RoomDto.toDto(roomList));
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", sizeOfPage);
         model.addAttribute("totalPage", roomPage.getTotalPages() == 0 ? 1 : roomPage.getTotalPages());
         model.addAttribute("exportSuccess", exportSuccess);
 
@@ -130,6 +130,7 @@ public class AdminController {
 
     @GetMapping("/RevenueManagement")
     public String revenueManagement(Authentication authentication, Model model,
+                                    @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,
                                  @RequestParam(name = "exportSuccess", defaultValue = "false") String exportSuccess,
                                  @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) throws JsonProcessingException {
         func_common(authentication, model);
@@ -138,13 +139,14 @@ public class AdminController {
             pageNo = 1; // Đảm bảo pageNo luôn bắt đầu từ 1
         }
 
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
         Page<PaymentDto> revenues = paymentService.getAllRevenueForAdmin(pageable);
         List<PaymentDto> revenueList = new LinkedList<>();
         revenues.forEach(revenueList::add);
         model.addAttribute("exportSuccess", exportSuccess);
         model.addAttribute("revenues", revenueList);
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", sizeOfPage);
         model.addAttribute("totalPage", revenues.getTotalPages() == 0 ? 1 : revenues.getTotalPages());
 
         List<PaymentTransaction> allRevenues = paymentService.getAllRevenues();
@@ -194,6 +196,7 @@ public class AdminController {
 
     @GetMapping("/UserManagement")
     public String userManagement(Authentication authentication, Model model,
+                                 @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,
                                  @RequestParam(name = "exportSuccess", defaultValue = "false") String exportSuccess,
                                  @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) throws JsonProcessingException {
         func_common(authentication, model);
@@ -202,13 +205,14 @@ public class AdminController {
             pageNo = 1; // Đảm bảo pageNo luôn bắt đầu từ 1
         }
 
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
         Page<UserDto> userPage = userService.getAllUserForAdmin(pageable);
         List<UserDto> userList = new LinkedList<>();
         userPage.forEach(userList::add);
         model.addAttribute("exportSuccess", exportSuccess);
         model.addAttribute("users", userList);
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", sizeOfPage);
         model.addAttribute("totalPage", userPage.getTotalPages() == 0 ? 1 : userPage.getTotalPages());
 
         List<User> users = UserDto.toUser(userService.getAllUser());

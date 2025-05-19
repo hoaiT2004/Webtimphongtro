@@ -1,6 +1,8 @@
 package com.example.btl_ltw.controller;
 
+import com.example.btl_ltw.entity.Room;
 import com.example.btl_ltw.model.dto.RoomDto;
+import com.example.btl_ltw.repository.RoomRepository;
 import com.example.btl_ltw.service.PaymentService;
 import com.example.btl_ltw.service.RedisService;
 import com.example.btl_ltw.service.RoomService;
@@ -29,6 +31,9 @@ public class PaymentController {
     @Autowired
     private RoomService roomService;
 
+    @Autowired
+    private RoomRepository roomRepository;
+
     @Value("${vnp.tmnCode}")
     private String vnp_TmnCode;
 
@@ -40,6 +45,9 @@ public class PaymentController {
 
     @Value("${vnp.returnUrl}")
     private String vnp_ReturnUrl;
+
+    @Value("${vnp.returnUrlForUpgrade}")
+    private String vnp_ReturnUrlForUpgrade;
 
     @Autowired
     private RedisService redisService;
@@ -56,6 +64,17 @@ public class PaymentController {
         return ResponseEntity.ok(vnpUrlFull);
     }
 
+    @GetMapping("/create-vnpay2")
+    public ResponseEntity<String> createPaymentForUpgrade(
+            @RequestParam String type,
+            @RequestParam int value,
+            HttpSession session,
+            HttpServletRequest request
+    ) {
+        String query = paymentService.createPaymentForUpgrade(session, type, value, vnp_TmnCode, vnp_ReturnUrlForUpgrade, vnp_HashSecret, request);
+        String vnpUrlFull = vnp_Url + "?" + query;
+        return ResponseEntity.ok(vnpUrlFull);
+    }
 
     @GetMapping("/payment-return")
     public String handleReturn(@RequestParam Map<String, String> params) {
@@ -85,6 +104,42 @@ public class PaymentController {
             }
             roomDto.setVipStatus(true);
             roomService.addRoom(roomDto, files, username);
+            redisService.delete(txnRef);
+            return "payment_success";
+        } else {
+            return "payment-fail";
+        }
+    }
+
+    @GetMapping("/payment-return2")
+    public String handleReturnForUpgrade(@RequestParam Map<String, String> params) {
+
+        String responseCode = params.get("vnp_ResponseCode");
+        String txnRef = params.get("vnp_TxnRef");
+        long amount = Long.parseLong(params.get("vnp_Amount")) / 100;
+
+        Long roomID = Long.parseLong(redisService.getRoomID(txnRef)+"");
+        String username = redisService.getUser(txnRef);
+        RoomDto roomDto = roomService.getInfoRoomByRoom_Id(roomID+"");
+
+        if ("00".equals(responseCode)) {
+            String orderInfo = params.get("vnp_OrderInfo");
+            paymentService.save(txnRef, amount, orderInfo, username);
+            String[] info = orderInfo.split("x");
+            switch (info[0]) {
+                case "ngay":
+                    roomDto.setVipDateNumber(roomDto.getVipDateNumber() + Integer.parseInt(info[1]));
+                    break;
+                case "tuan":
+                    roomDto.setVipDateNumber(roomDto.getVipDateNumber() + Integer.parseInt(info[1]) * 7);
+                    break;
+                case "thang":
+                    roomDto.setVipDateNumber(roomDto.getVipDateNumber() + Integer.parseInt(info[1]) * 31);
+                    break;
+            }
+            roomDto.setVipStatus(true);
+            roomRepository.save(RoomDto.toRoom(roomDto));
+            redisService.deleteForUpgradeTask(txnRef);
             return "payment_success";
         } else {
             return "payment-fail";

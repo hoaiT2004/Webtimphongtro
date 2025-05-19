@@ -20,6 +20,10 @@ public class FavoriteRoomServiceImpl implements FavoriteRoomService {
     @Autowired
     private FavoriteRoomRepository favoriteRoomRepository;
 
+    public Integer getTotalAddFavoriteByRoomId(Long roomId) {
+        return favoriteRoomRepository.getTotalAddFavoriteByRoomId(roomId);
+    }
+
     @Override
     @Transactional
     public void saveFavoriteRoom(Long userId, Long roomId) {

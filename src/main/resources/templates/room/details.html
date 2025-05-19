@@ -293,6 +293,7 @@
                         <div class="info-container">
                             <div class="views-container">
                                 <p class="right-text" th:text="${room.getViewNumber()} + ' views'"></p>
+                                <p class="right-text" th:text="${totalAddFavorite} + ' lượt thêm'"></p>
                             </div>
                             <div class="rating-container">
                                 <form th:action="@{/api/room/addStar}" method="post">

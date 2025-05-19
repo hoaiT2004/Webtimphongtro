@@ -106,11 +106,6 @@
     background-color: #002e7a; /* Màu nền khi hover */
   }
 
-  .detail-container {
-    width: 90%;
-    margin: 0 auto;
-  }
-
   body {
     justify-content: center;
     position: relative;
@@ -226,26 +221,6 @@
     div.small-device {
       display: flex !important;
     }
-
-    .main-info {
-      display: block;
-    }
-
-    .sticky {
-      position: absolute !important;
-      top: 0;
-      width: 100%
-    }
-    .item{
-      display: block !important;
-    }
-    .image{
-      width: 100% !important;
-      margin: 0 !important;
-    }
-    .info{
-      width: 100% !important;
-    }
   }
 
 
@@ -324,59 +299,14 @@
     animation: move 10s infinite;
   }
 
-  .item {
-    display: flex;
-    border-top: 1px solid gray;
-  }
-
-  .image {
-    width: 30%;
-    margin: auto 10px;
-    padding: 5px;
-  }
 
   .image>img {
     border-radius: 7px;
   }
 
-  .border-image{
-    border-radius: 7px;
-  }
-
-  .info {
-    width: 70%;
-  }
-
-  .main-title {
-    width: 100%;
-    /* padding: 10px; */
-    font-size: 150%;
-  }
-
-  .main-info {
-    width: 100%;
-    justify-content: space-between;
-    /* padding: 10px; */
-  }
-
   .info>div {
     padding: 10px;
   }
-
-  .detail-title {
-    font-size: 200%;
-    text-transform: capitalize;
-  }
-
-  .comment-form {
-    width: 90%;
-    margin: 0 auto;
-    padding: 5px 0px;
-    font-size: 120%;
-    background-color: lightgray;
-    border-radius: 7px;
-  }
-
   input[type="text"],
   input[type="email"],
   textarea {
@@ -500,14 +430,6 @@
     background: transparent;
   }
 
-
-  .thump {
-    width: 15%;
-  }
-
-  .main  {
-    width: 80%;
-  }
   body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
@@ -540,13 +462,7 @@
     text-align: center;
     padding: 20px;
   }
-  .filter-bar {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 15px;
-    margin: 20px 0;
-  }
+
   .filter-bar input[type="text"],
   .filter-bar select {
     padding: 10px;
@@ -636,13 +552,6 @@
     margin: 0 auto;
   }
 
-  .content-layout {
-    display: flex;
-    justify-content: space-between;
-    gap: 20px;
-    margin-top: 20px;
-  }
-
   .user-section {
     flex: 2;
     background: white;
@@ -725,13 +634,6 @@
     padding: 10px;
   }
 
-  /* Phân trang */
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    margin-top: 20px;
-  }
-
   .pagination {
     display: flex;
     gap: 5px;
@@ -758,7 +660,6 @@
   }
 
 </style>
-</head>
 <body>
 
   <header>
@@ -826,6 +727,13 @@
         <div class="user-section border">
           <h1 class="title" style="background-color: #1266dd; font-style: initial; color: white">Quản Lý Người Dùng</h1>
           <a th:href="@{/admin/printUsers}">Xuất ra Excel</a>
+          <br>
+          <label for="pageSize">Hiển thị:</label>
+          <select id="pageSize" name="pageSize" onchange="filterByPageSize(this)">
+            <option value="10" th:selected="${pageSize == '10'}">10 hàng</option>
+            <option value="20" th:selected="${pageSize == '20'}">20 hàng</option>
+            <option value="30" th:selected="${pageSize == '30'}">30 hàng</option>
+          </select>
           <!-- Thêm thông báo thành công -->
           <div th:if="${exportSuccess == 'true'}" class="alert alert-success" style="position: fixed; top: 20px; left: 50%; transform: translateX(-50%); z-index: 9999;">
             Xuất Excel thành công!
@@ -858,11 +766,11 @@
               </li>
               <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                   th:classappend="${currentPage == i ? 'active' : ''}">
-                <a th:href="@{'/admin/UserManagement?pageNo=' + ${i}}" th:text="${i}">
+                <a th:href="@{'/admin/UserManagement?pageSize='+${pageSize} +'&pageNo=' + ${i}}" th:text="${i}">
                 </a>
               </li>
               <li th:if="${currentPage < totalPage}">
-                <a th:href="@{'/admin/UserManagement?pageNo=' + ${currentPage + 1}}">>>
+                <a th:href="@{'/admin/UserManagement?pageSize='+${pageSize} +'&pageNo=' + ${currentPage + 1}}">>>
                 </a>
               </li>
             </ul>
@@ -939,6 +847,14 @@
     userChart.data.labels = labels[type];
     userChart.data.datasets[0].data = newData;
     userChart.update();
+  }
+</script>
+<script>
+  function filterByPageSize(selectElement) {
+    const selectedPageSize = selectElement.value;
+    const baseUrl = window.location.pathname; // giữ nguyên URL hiện tại
+    const url = `${baseUrl}?pageSize=${selectedPageSize}`;
+    window.location.href = url;
   }
 </script>
 </html>

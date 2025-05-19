@@ -196,7 +196,6 @@
 /*   */
     .vip-options {
         margin-top: 15px;
-        display: none;
     }
     label {
         margin-right: 10px;
@@ -263,25 +262,9 @@
 </nav>
 
 <div style="max-width: 600px; margin: 0 auto; padding: 60px 30px 30px;border: 1px solid #ccc; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); background-color: #fff;">
-    <h2 class="text-center" style="margin-bottom: 30px;">Chọn loại phòng</h2>
+    <h2 class="text-center" style="margin-bottom: 30px;">Gia hạn vip</h2>
 
     <form id="roomForm" class="form-horizontal">
-        <div class="form-group">
-            <label class="control-label col-sm-4" style="text-align: left">Loại phòng:</label>
-            <div class="col-sm-8">
-                <label class="radio-inline">
-                    <input type="radio" name="roomType" value="normal" checked> Phòng thường
-                </label>
-                <label class="radio-inline">
-                    <input type="radio" name="roomType" value="vip"> Phòng VIP
-                </label>
-            </div>
-        </div>
-
-        <div class="form-group text-center">
-            <a th:href="@{/landlord/addFinish}" style="width: 100px" id="normalClick" class="btn btn-primary">Thanh toán</a>
-        </div>
-
         <div class="vip-options" id="vipOptions">
             <div class="form-group">
                 <label for="durationType" style="text-align: left" class="control-label col-sm-4">Chọn gói:</label>
@@ -343,45 +326,6 @@
         totalAmountSpan.textContent = total.toLocaleString('vi-VN');
     }
 
-    // Slide animation
-    function slideDown(el) {
-        el.style.display = 'block';
-        el.style.height = '0';
-        el.style.overflow = 'hidden';
-        let h = el.scrollHeight;
-        el.style.transition = 'height 0.3s ease';
-        el.style.height = h + 'px';
-        setTimeout(() => {
-            el.style.height = '';
-            el.style.overflow = '';
-        }, 300);
-    }
-
-    function slideUp(el) {
-        el.style.height = el.scrollHeight + 'px';
-        el.offsetHeight; // force repaint
-        el.style.transition = 'height 0.3s ease';
-        el.style.height = '0';
-        el.style.overflow = 'hidden';
-        setTimeout(() => {
-            el.style.display = 'none';
-            el.style.height = '';
-            el.style.overflow = '';
-        }, 300);
-    }
-
-    roomTypeRadios.forEach(radio => {
-        radio.addEventListener('change', () => {
-            if (radio.value === 'vip' && radio.checked) {
-                normalClick.style.display = "none";
-                slideDown(vipOptions);
-            } else {
-                normalClick.style.display = "block";
-                slideUp(vipOptions);
-            }
-        });
-    });
-
     durationType.addEventListener('change', function () {
         const val = this.value;
         if (val === 'ngay') {
@@ -414,7 +358,7 @@
         }
 
         if (confirm(`Xác nhận thanh toán ${total.toLocaleString('vi-VN')}đ qua VNPAY?`)) {
-            fetch(`/api/payment/create-vnpay?type=${type}&value=${value}`)
+            fetch(`/api/payment/create-vnpay2?type=${type}&value=${value}`)
                 .then(res => res.text())
                 .then(url => window.location.href = url)
                 .catch(err => alert("Lỗi tạo URL thanh toán"));

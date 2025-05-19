@@ -34,4 +34,5 @@ vnp:
   tmnCode: 2MKOF115
   hashSecret: SVUDY08SJ9EGOFSQPX3U8DDW276I6ZH4
   url: https://sandbox.vnpayment.vn/paymentv2/vpcpay.html
-  returnUrl: https://ca70-103-238-68-84.ngrok-free.app/api/payment/payment-return
+  returnUrl: https://09cb-103-238-68-82.ngrok-free.app/api/payment/payment-return
+  returnUrlForUpgrade: https://09cb-103-238-68-82.ngrok-free.app/api/payment/payment-return2

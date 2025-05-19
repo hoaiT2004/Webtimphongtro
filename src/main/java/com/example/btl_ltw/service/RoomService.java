@@ -27,7 +27,7 @@ public interface RoomService {
 
     void deleteRoomByRoomId(Long room_id);
 
-    void updateRoom(RoomDto roomDto, Authentication auth, List<MultipartFile> imagesAdd, List<Long> imageIdsDel) throws ExecutionException, InterruptedException;
+    void updateRoom(RoomDto roomDto, List<MultipartFile> imagesAdd, List<Long> imageIdsDel) throws ExecutionException, InterruptedException;
 
     void approveRoom(Long roomId);
 

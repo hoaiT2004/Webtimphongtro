@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 
 @Service
 public class AppointmentServiceImpl implements AppointmentService {
@@ -33,6 +34,7 @@ public class AppointmentServiceImpl implements AppointmentService {
                 .tel(request.getTel())
                 .numPeople(request.getNumPeople())
                 .comeDate(Date.valueOf(request.getComeDate()))
+//                .comeDate(new SimpleDateFormat("dd/MM/yyyy").parse(request.getComeDate()))
                 .transportation(request.getTransportation())
                 .isApproval("false")
                 .build();

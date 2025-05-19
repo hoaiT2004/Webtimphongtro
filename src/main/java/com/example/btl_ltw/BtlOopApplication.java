@@ -87,6 +87,8 @@ public class BtlOopApplication {
 //                .address("Số nhà 37, ngõ 31 phố Lương Ngọc Quyến, Văn Quán, Hà Đông - HN")
 //                .capacity(2)
 //                .price(4.3)
+//                .waterPrice(5)
+//                .electricityPrice(5)
 //                .description("Có đồng hồ điện, nước riêng, nhà ở riêng biệt thoáng mát, " +
 //                        "\ntrước cửa là một sân chơi rộng, gần nhiều trường Đại học (Kiến Trúc, SP Nghệ Thuật, Bưu Chính, Hà Nội, CN GTVT,…), " +
 //                        "\nđối diện chợ Phùng Khoang 200m")
@@ -99,6 +101,8 @@ public class BtlOopApplication {
 //                .user_id(u1.getId())
 //                .address("Ngã tư Tố Hữu-Vạn Phúc-Hà Đông")
 //                .capacity(2)
+//                .waterPrice(5)
+//                .electricityPrice(5)
 //                .price(2.8)
 //                .description("Tầng 5/8, có 2 cửa sổ, full nội thất cơ bản")
 //                .roomType(RoomType.KHONG_CHUNG_CHU)
@@ -110,7 +114,8 @@ public class BtlOopApplication {
 //                .user_id(u2.getId())
 //                .address("Ngõ 1 Trần Nhật Duật, Q.Trung, Hà Đông, Hà Nội")
 //                .capacity(2)
-//                .price(3.5)
+//                .price(3.5).waterPrice(5)
+//                .electricityPrice(5)
 //                .description("Có giường, tủ, vệ sinh khép kín. Có chỗ để xe T1. " +
 //                        "\nKhu vực bếp chung ở T2, có máy giặt và khu phơi q.áo trên T5. " +
 //                        "\nĐiện 3.8k/1 số. Nước + phí đổ rác 80k/tháng. \n" +
@@ -125,7 +130,8 @@ public class BtlOopApplication {
 //                .user_id(u2.getId())
 //                .address("Tổ 9 -Mặt  Phố Mậu Lương, thuận tiện xe buýt, xe liên tỉnh")
 //                .capacity(2)
-//                .price(2.8)
+//                .price(2.8).waterPrice(5)
+//                .electricityPrice(5)
 //                .description("Có giường tủ, vệ sinh khép kín, nóng lạnh, điều hòa, ban công." +
 //                        "\n Điện 3k/số. Nước 25k/khối")
 //                .roomType(RoomType.KHONG_CHUNG_CHU)
@@ -136,7 +142,8 @@ public class BtlOopApplication {
 //        var r5 = Room.builder()
 //                .user_id(u3.getId())
 //                .address("31, ngách 43/23 phố Văn Phú, Phú La, Hà Đông")
-//                .capacity(2)
+//                .capacity(2).waterPrice(5)
+//                .electricityPrice(5)
 //                .price(2.2)
 //                .description("Full đồ, điện nước giá dân, vệ sinh chung")
 //                .roomType(RoomType.CHUNG_CHU)
@@ -147,7 +154,8 @@ public class BtlOopApplication {
 //        var r6 = Room.builder()
 //                .user_id(u4.getId())
 //                .address("Chung cư Sông nhuệ - đối diện viện K tân triều, gần ngã ba Xa La Hà đông")
-//                .capacity(4)
+//                .capacity(4).waterPrice(5)
+//                .electricityPrice(5)
 //                .price(5)
 //                .description("Full nội thất cơ bản, điện 3,5k/số, nước 60k/người/tháng\n" +
 //                        "mạng 100k/tháng, phí dịch vụ chung cư 4k/m2")
@@ -159,7 +167,8 @@ public class BtlOopApplication {
 //        var r7 = Room.builder()
 //                .user_id(u5.getId())
 //                .address("165 Phố Văn Quán")
-//                .capacity(3)
+//                .capacity(3).waterPrice(5)
+//                .electricityPrice(5)
 //                .price(3.6)
 //                .description("Full nội thất cơ bản, vệ sinh khép kín, có gác xép")
 //                .roomType(RoomType.KHONG_CHUNG_CHU)
@@ -171,7 +180,8 @@ public class BtlOopApplication {
 //                .user_id(u5.getId())
 //                .address("Văn Khê (Giữa ngõ 32A Ngô Quyền-khu cây Quýt)")
 //                .capacity(4)
-//                .price(4.6)
+//                .price(4.6).waterPrice(5)
+//                .electricityPrice(5)
 //                .description("Nội thất: VSKK, có gác xép để đồ, thang máy, PCCC\n" +
 //                        "Full đồ: giường, tủ quần áo, điều hòa, nóng lạnh, tủ bếp, chạn bát, tủ lạnh\n" +
 //                        "Máy giặt chung, có ban công phơi đồ riêng, Wifi\n" +

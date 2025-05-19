@@ -58,7 +58,7 @@ public class RoomServiceImpl implements RoomService {
     @Modifying
     @Transactional
     @Override
-    public void updateRoom(RoomDto roomDto, Authentication auth, List<MultipartFile> imagesAdd, List<Long> imageIdsDel) throws ExecutionException, InterruptedException {
+    public void updateRoom(RoomDto roomDto, List<MultipartFile> imagesAdd, List<Long> imageIdsDel) throws ExecutionException, InterruptedException {
         Room oldroom = roomRepository.findById(roomDto.getRoom_id()).orElse(null);
         if (!oldroom.isVipStatus()) {
             oldroom.setIsApproval("false");
@@ -186,6 +186,7 @@ public class RoomServiceImpl implements RoomService {
         Optional<User> user = userRepository.findUserByUsername(username);
         room.setUser_id(user.get().getId());
         room.setImage(images.get(0));//luu anh vao roomentity
+        room.setId(null);
         roomRepository.save(room);
 
         for (int i = 0; i < images.size(); i++) {//luu anh vao bang image

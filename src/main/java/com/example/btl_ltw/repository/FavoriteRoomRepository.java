@@ -49,4 +49,8 @@ public interface FavoriteRoomRepository extends JpaRepository<FavoriteRoom, Long
             "(:area = '40' AND r.area > 40)) "+
             " AND (:roomType IS NULL OR r.roomType = :roomType)")
     Page<Room> findAllWithManyConstraints(@Param("price") String price, @Param("address") String address, @Param("area") String area, @Param("roomType") RoomType roomType, Long userId, Pageable pageable);
+
+    @Query("SELECT COUNT(*) FROM FavoriteRoom f " +
+            "WHERE f.room_id = :roomId")
+    Integer getTotalAddFavoriteByRoomId(Long roomId);
 }

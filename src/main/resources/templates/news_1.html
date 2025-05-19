@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.js"
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <style>
     * {
@@ -29,20 +30,6 @@
     a {
         text-decoration: none !important;
     }
-
-    .subject {
-        text-align: center;
-        text-transform: uppercase;
-    }
-
-    .left {
-        background-color: white;
-        border: 1px solid;
-        width: 70%;
-        height: 100%;
-        margin-bottom: 20px;
-    }
-
     .right {
         /* background-color: white; */
         /* border: 1px solid; */
@@ -53,19 +40,6 @@
     .bg-white {
         background-color: white;
     }
-
-    .right-no-border {
-        width: 28%;
-        height: 100%;
-    }
-
-    .content {
-        display: flex;
-        justify-content: space-evenly;
-        flex-wrap: wrap;
-    }
-
-
     .flex {
         display: flex;
         align-items: center;
@@ -91,11 +65,6 @@
         margin: 0 auto;
     }
 
-    .detail-container {
-        width: 90%;
-        margin: 0 auto;
-    }
-
     body {
         justify-content: center;
         position: relative;
@@ -107,16 +76,6 @@
         border-radius: 7px;
     }
 
-    .bordertop {
-        border-top: 0;
-        border: 0.5px solid gray;
-        border-radius: 7px 7px 0 0;
-    }
-
-    .borderbottom {
-        border: 0.5px solid gray;
-        border-radius: 0 0 7px 7px;
-    }
 
     nav {
         background-color: #1266dd;
@@ -561,87 +520,90 @@
 </nav>
 
 
-<div class="container bg-white">
-    <h1>Kinh nghiệm thuê phòng trọ dành cho sinh viên</h1>
-    <section>
-        <h2>1. Xác định khu vực thuê trọ</h2>
-        <ul class="larger-font">
-            <li><strong>Xác định khu vực thuê trước khi đến học: </strong>Sinh viên cần lựa chọn khu vực thuê trọ trước
-                khi chuyển đến tỉnh, thành phố mới, đặc biệt là các đô thị đông đúc, nơi việc tìm phòng trọ có thể khó
-                khăn và tốn thời gian.
+<div class="container my-5 bg-white p-4 rounded shadow">
+    <h1 class="text-center text-primary mb-4">Kinh nghiệm thuê phòng trọ dành cho sinh viên</h1>
 
-            </li>
-            <li><strong>Thuê gần trường học: </strong>Nên ưu tiên khu vực gần trường để thuận tiện cho việc di chuyển,
-                tiết kiệm thời gian và chi phí đi lại. Chọn khu vực này cũng giúp tiếp cận dễ dàng các tiện ích như cửa
-                hàng tiện lợi, siêu thị, và bệnh viện.
-            </li>
-            <li><strong>Chọn theo giá khu vực: </strong>Nếu trường nằm ở quận có mức sống cao như Quận 1, Quận 2
-                (Tp.HCM) hay Hoàn Kiếm, Ba Đình (Hà Nội), cần cân nhắc lựa chọn nơi thuê phù hợp với ngân sách.
-            </li>
-            <li><strong>Ở ghép để giảm chi phí: </strong>Ở cùng với bạn bè giúp giảm chi phí thuê và các chi phí sinh
-                hoạt khác, dễ dàng chọn trọ với giá hợp lý hơn.
-            </li>
+    <!-- Video mở đầu -->
+    <div class="mb-4 text-center">
+        <iframe width="640" height="360" src="https://www.youtube.com/embed/Ruu3uL1KSnk" title="Các Bước Sinh Viên Cần Làm Khi Thuê Phòng Trọ Và Những Lưu Ý Để Tránh Bị Lừa Đảo | SuperTeo" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen>
+        </iframe>
+    </div>
+
+    <!-- Section 1 -->
+    <section class="mb-5">
+        <h2 class="text-primary">1. Xác định khu vực thuê trọ</h2>
+        <div class="row">
+            <div class="col-md-7">
+                <ul class="fs-5">
+                    <li><strong>Xác định khu vực thuê trước khi đến học:</strong> Ưu tiên chọn khu vực trước khi chuyển đến để tránh mất thời gian.</li>
+                    <li><strong>Thuê gần trường học:</strong> Giúp tiết kiệm thời gian, chi phí di chuyển và dễ tiếp cận tiện ích.</li>
+                    <li><strong>Chọn theo giá khu vực:</strong> Lưu ý ngân sách khi thuê trọ ở các quận trung tâm.</li>
+                    <li><strong>Ở ghép để giảm chi phí:</strong> Ở chung giúp chia sẻ tiền thuê và chi phí sinh hoạt.</li>
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <img src="data:image/jpeg;base64,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" class="img-fluid rounded" alt="Sinh viên tìm phòng trọ">
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 2 -->
+    <section class="mb-5">
+        <h2 class="text-primary">2. Kiểm tra chất lượng trọ và an ninh khu vực</h2>
+        <div class="row">
+            <div class="col-md-5 mb-3">
+                <img src="data:image/jpeg;base64,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" class="img-fluid rounded" alt="Kiểm tra phòng trọ">
+            </div>
+            <div class="col-md-7">
+                <ul class="fs-5">
+                    <li><strong>Đi cùng người có kinh nghiệm</strong></li>
+                    <li><strong>Không gian phòng:</strong> Sạch sẽ, thoáng, không ẩm mốc.</li>
+                    <li><strong>Kiểm tra an ninh:</strong> Cửa chắc chắn, có camera.</li>
+                    <li><strong>Tường, trần, đồ đạc:</strong> Báo hư hỏng để tránh tranh chấp.</li>
+                    <li><strong>Nơi để xe:</strong> An toàn, phí gửi hợp lý.</li>
+                    <li><strong>Nhà vệ sinh riêng:</strong> Ưu tiên có toilet riêng sạch sẽ.</li>
+                    <li><strong>Kiểm tra điện nước, wifi:</strong> Rõ ràng chi phí và thiết bị.</li>
+                </ul>
+            </div>
+        </div>
+    </section>
+
+    <!-- Section 3 -->
+    <section class="mb-5">
+        <h2 class="text-primary">3. Thông tin về tiền cọc và hợp đồng thuê</h2>
+        <ul class="fs-5">
+            <li><strong>Tiền cọc:</strong> Đặt trước khi chuyển đồ, nên có xác nhận rõ ràng.</li>
+            <li><strong>Tránh môi giới:</strong> Có thể phát sinh chi phí và khó khiếu nại.</li>
+            <li><strong>Đọc kỹ hợp đồng:</strong> Xem kỹ điều khoản, tiền thuê, phạt vi phạm.</li>
         </ul>
     </section>
 
-    <section>
-        <h2>2. Kiểm tra chất lượng trọ và an ninh khu vực</h2>
-        <ul class="larger-font">
-            <li><strong>Đi cùng người có kinh nghiệm:</strong> Khi đi kiểm tra phòng trọ, nên đi cùng người thân hoặc
-                bạn bè có kinh nghiệm để đánh giá nội, ngoại thất.
-            </li>
-            <li><strong>Không gian phòng:</strong> Đảm bảo phòng trọ sạch sẽ, thoáng mát, không bị ẩm mốc, dột, thiếu
-                ánh sáng.
-            </li>
-            <li><strong>Kiểm tra an ninh:</strong> Cửa ra vào và cửa sổ cần chắc chắn; ưu tiên nơi có camera an ninh.
-            </li>
-            <li><strong>Tường, trần và đồ đạc:</strong> Kiểm tra hư hỏng để báo chủ trọ, tránh tranh chấp sau này.</li>
-            <li><strong>Nơi để xe:</strong> Hỏi về chỗ để xe và cổng ngoài để an ninh hơn và giảm phí gửi xe.</li>
-            <li><strong>Nhà vệ sinh riêng:</strong> Tìm phòng có nhà vệ sinh riêng, sạch sẽ.</li>
-            <li><strong>Kiểm tra điện, nước, wifi:</strong> Đảm bảo không có gian lận và rõ ràng về hóa đơn.</li>
-        </ul>
+    <!-- Section 4 -->
+    <section class="mb-5">
+        <h2 class="text-primary">4. Cách tìm phòng trọ</h2>
+        <div class="row">
+            <div class="col-md-7">
+                <ul class="fs-5">
+                    <li><strong>Nhờ người quen:</strong> Hỏi bạn bè, người thân.</li>
+                    <li><strong>Tìm trên internet:</strong> Dùng mogi.vn, muaban.net...</li>
+                    <li><strong>Tìm trực tiếp:</strong> Đến khu vực xem phòng thực tế.</li>
+                </ul>
+            </div>
+            <div class="col-md-5">
+                <img src="data:image/jpeg;base64,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" class="img-fluid rounded" alt="Tìm phòng trên mạng">
+            </div>
+        </div>
     </section>
 
+    <!-- Section 5 -->
     <section>
-        <h2>3. Thông tin về tiền cọc và hợp đồng thuê</h2>
-        <ul class="larger-font">
-            <li><strong>Tiền cọc:</strong> Đặt cọc trước khi chuyển đồ vào, số tiền này sẽ được trả lại hoặc gộp vào
-                tiền thuê.
-            </li>
-            <li><strong>Tránh môi giới:</strong> Thuê trọ qua môi giới có thể gây khó khăn khi giải quyết vấn đề và tốn
-                thêm chi phí.
-            </li>
-            <li><strong>Đọc kỹ hợp đồng:</strong> Kiểm tra các điều khoản như thời hạn, tiền thuê, phụ phí, điều kiện
-                phạt khi vi phạm để bảo vệ quyền lợi trước khi ký.
-            </li>
+        <h2 class="text-primary">5. Thời gian chuyển đến ở</h2>
+        <ul class="fs-5">
+            <li><strong>Chuẩn bị thời gian trước khi nhập học:</strong> Nên đến sớm 1–2 tháng để dễ chọn phòng.</li>
+            <li><strong>Chuyển đến sớm để ổn định:</strong> Làm quen đường đi, khu vực xung quanh.</li>
+            <li><strong>Lưu ý khi thuê trọ:</strong> Tập hợp các điều cần nhớ khi tìm thuê phòng.</li>
         </ul>
     </section>
-
-    <section>
-        <h2>4. Cách tìm phòng trọ</h2>
-        <ul class="larger-font">
-            <li><strong>Nhờ người quen:</strong> Nhờ bạn bè, đồng nghiệp giúp tìm kiếm.</li>
-            <li><strong>Tìm trên internet:</strong> Sử dụng các trang bất động sản uy tín như mogi.vn, muaban.net.</li>
-            <li><strong>Tìm trực tiếp:</strong> Đi đến khu vực mong muốn để tìm phòng trọ và quan sát thực tế.</li>
-        </ul>
-    </section>
-
-    <section>
-        <h2>5. Thời gian chuyển đến ở</h2>
-        <ul class="larger-font">
-            <li><strong>Chuẩn bị thời gian trước khi nhập học: </strong>Nên đến thành phố trước 1-2 tháng để tìm trọ vì
-                có thể mất vài ngày hoặc hơn để chọn phòng ưng ý.
-            </li>
-            <li><strong>Chuyển đến sớm để ổn định và làm quen: </strong>Việc chuyển đến sớm giúp sinh viên ổn định chỗ ở
-                và làm quen với đường xá trước khi nhập học.
-            </li>
-            <li><strong>Lưu ý khi thuê trọ: </strong>Tổng hợp các lưu ý cơ bản nhằm giúp sinh viên chuẩn bị thuận lợi,
-                tìm được phòng trọ phù hợp trước khi nhập học.
-            </li>
-        </ul>
-
-    </section>
-
 </div>
 
 </body>

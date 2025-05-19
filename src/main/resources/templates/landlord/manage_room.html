@@ -412,7 +412,51 @@
         .pagination button:hover {
             background-color: #003c9d;
         }
+        .transaction-history {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
 
+        .transaction-history h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-table th, .transaction-table td {
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .transaction-table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .transaction-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .status.success {
+            background-color: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -462,10 +506,10 @@
     </div>
 </nav>
 
-<div class="container" >
+<div class="container">
     <section>
         <div style="margin-top: 10px;" class="content">
-            <div>
+            <div class="transaction-history">
                 <h3 style="text-align: center">Quản lý phòng</h3>
                 <div class="filter-container container" style="border-color: white">
                     <form th:action="@{/landlord/manage}" method="GET" class="flex" style="justify-content: space-evenly; margin-top: 20px; margin-bottom: 20px;">
@@ -537,8 +581,14 @@
                         </div>
                     </form>
                 </div>
-
-                <table>
+                <label for="pageSize">Hiển thị:</label>
+                <select id="pageSize" name="pageSize" onchange="filterByPageSize(this)">
+                    <option value="10" th:selected="${pageSize == '10'}">10 hàng</option>
+                    <option value="20" th:selected="${pageSize == '20'}">20 hàng</option>
+                    <option value="30" th:selected="${pageSize == '30'}">30 hàng</option>
+                </select>
+                <div class="table-responsive">
+                <table  class="transaction-table">
                     <thead>
                     <tr>
                         <th style="background-color: #1266dd">Ảnh</th>
@@ -547,7 +597,7 @@
                         <th style="background-color: #1266dd;">Tiền nước</th>
                         <th style="background-color: #1266dd">Địa Chỉ</th>
                         <th style="background-color: #1266dd">Diện Tích</th>
-                        <th style="background-color: #1266dd">Kiểu Phòng</th>
+                        <th style="background-color: #1266dd">Ngày Vip</th>
                         <th style="background-color: #1266dd">Trạng thái</th>
                         <th style="background-color: #1266dd">Hành động</th>
                     </tr>
@@ -562,7 +612,7 @@
                         </td>
                         <td th:if="${room.isVipStatus() != true}" th:text="${room.address}"></td>
                         <td th:if="${room.isVipStatus() != true}" th:text="${room.area + ' m²'}"></td>
-                        <td th:if="${room.isVipStatus() != true}" th:text="${room.roomType}"></td>
+                        <td th:if="${room.isVipStatus() != true}" th:text="${room.getVipDateNumber()}"></td>
                         <td th:if="${room.isVipStatus() != true}" th:text="${room.isApproval ? 'Đã duyệt' : 'Chưa duyệt'}"></td>
 
                         <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.price + ' triệu/tháng'}"></td>
@@ -572,42 +622,41 @@
                         </td>
                         <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.address}"></td>
                         <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.area + ' m²'}"></td>
-                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.roomType}"></td>
+                        <td th:if="${room.isVipStatus() == true}" style="color: red" th:text="${room.getVipDateNumber()}"></td>
                         <td th:if="${room.isVipStatus() == true}" style="color: red">Đã duyệt</td>
 
                         <td>
-                            <div style="width: 100px; text-align: center;">
+                            <div>
                                 <!-- Lưu URL xóa trong input hidden -->
                                 <input type="text" th:value="'/landlord/delete?roomId=' + ${room.getRoom_id()}" hidden="hidden" th:id="'url-' + ${room.getRoom_id()}"/>
-                                <a href="#" th:onclick="'confirmDelete('+${room.getRoom_id()}+')'" style="text-align: center">Xóa</a>
+                                <a href="#" th:onclick="'confirmDelete('+${room.getRoom_id()}+')'" class="btn btn-danger">Xóa</a>
                             </div>
                             <div>
-                                <a href="#" th:onclick="'sendRoomId(' + ${room.getRoom_id()} + ')'" style="text-align: center">Cập nhật</a>
+                                <a href="#" th:onclick="'sendRoomId(' + ${room.getRoom_id()} + ')'" class="btn btn-success">Cập nhật</a>
                             </div>
-<!--                            <div th:if="${room.isVipStatus() == true}">-->
-<!--                                <a href="#" style="text-align: center">Gia hạn</a>-->
-<!--                            </div>-->
-<!--                            <div th:if="${room.isVipStatus() != true}">-->
-<!--                                <a href="#" style="text-align: center">Nâng cấp</a>-->
-<!--                            </div>-->
+                            <div th:if="${room.isVipStatus() == true}">
+                                <a th:href="@{'/landlord/upgradeRoom?roomID=' + ${room.getRoom_id()}}" class="btn btn-warning">Gia hạn</a>
+                            </div>
+                            <div th:if="${room.isVipStatus() != true}">
+                                <a th:href="@{'/landlord/upgradeRoom?roomID=' + ${room.getRoom_id()}}" class="btn btn-warning">Nâng cấp</a>
+                            </div>
                         </td>
-
-
                     </tr>
                     </tbody>
                 </table>
+            </div>
                 <div class="box-footer clearfix">
                     <ul class="pagination pagination-sm no-margin pull-right">
                         <li th:if="${currentPage > 1}">
-                            <a th:href="@{'/landlord/manage?pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
+                            <a th:href="@{'/landlord/manage?pageSize='+${pageSize} +'&pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
                         </li>
                         <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                             th:classappend="${currentPage == i ? 'active' : ''}">
-                            <a th:href="@{'/landlord/manage?pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
+                            <a th:href="@{'/landlord/manage?pageSize='+${pageSize} +'&pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
                             </a>
                         </li>
                         <li th:if="${currentPage < totalPage}">
-                            <a th:href="@{'/landlord/manage?pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
+                            <a th:href="@{'/landlord/manage?pageSize='+${pageSize} +'&pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
                             </a>
                         </li>
                     </ul>
@@ -615,16 +664,6 @@
 
                 </div>
             </div>
-
-<!--            <div class="right border bg-white">-->
-<!--                <h3 class="subject">Tin mới đăng</h3>-->
-<!--                <ul class="flex v-menu">-->
-<!--                    <li><a href="/api/home/news_1">Những lưu ý khi thuê trọ</a></li>-->
-<!--                    <li><a href="/api/home/news_2">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>-->
-<!--                    <li><a href="/api/home/news_3">Nên thuê nhà ở đâu</a></li>-->
-<!--                    <li><a href="/api/home/news_4">Làm sao để nhà đẹp hơn</a></li>-->
-<!--                </ul>-->
-<!--            </div>-->
             <div class="right-no-border"></div>
             <div class="right-no-border"></div>
         </div>
@@ -650,6 +689,17 @@
     }
 
 </script>
-
+<script>
+    function filterByPageSize(selectElement) {
+        const selectedPageSize = selectElement.value;
+        const price = '[[${request.price}]]';
+        const address = '[[${request.address}]]';
+        const area = '[[${request.area}]]';
+        const roomType = '[[${request.roomType}]]';
+        const baseUrl = window.location.pathname; // giữ nguyên URL hiện tại
+        const url = `${baseUrl}?pageSize=${selectedPageSize}&price=${price}&address=${address}&area=${area}&roomType=${roomType}`;
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>

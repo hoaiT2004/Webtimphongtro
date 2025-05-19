@@ -44,8 +44,6 @@ public class LandlordController {
     @Autowired
     private FileService fileService;
 
-    private static final int sizeOfPage = 5;
-
     @Autowired
     private ImageRepository imageRepository;
 
@@ -58,9 +56,10 @@ public class LandlordController {
 
     @GetMapping("/transaction")
     public String transactionHistory(Model model, Authentication auth,
+                                     @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,
                                      @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) {
         commonFunc(auth, model);
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
         Page<PaymentDto> pages = paymentService.getAllRevenueForLandlord(auth.getName(), pageable);
         List<PaymentDto> transactions = new ArrayList<>();
         pages.forEach(transactions::add);
@@ -74,15 +73,16 @@ public class LandlordController {
 
     @GetMapping("/manage") //api/room/manage
     public String showOwnedRooms(Model model, Authentication auth,
+                                 @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage,
                                  @ModelAttribute RoomFilterDataRequest request,
                                  @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo) throws ParseException  {
         commonFunc(auth, model);
         String username = auth.getName();
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
         Page<Room> pages = roomService.getAllRoomByManyContraintsAndUsername(request, username, pageable);
         List<Room> li = new ArrayList<>();
         pages.forEach(li::add);
-        commonFunc2(model, pageNo, pages);
+        commonFunc2(model, pageNo, pages, sizeOfPage);
 
         model.addAttribute("request", request);
         model.addAttribute("rooms", RoomDto.toDto(li));
@@ -90,6 +90,13 @@ public class LandlordController {
         model.addAttribute("totalPage", pages.getTotalPages() == 0 ? 1 : pages.getTotalPages());
 
         return "landlord/manage_room";
+    }
+
+    @GetMapping("/add")
+    public String showAddRoomForm(@ModelAttribute RoomDto roomDto, Model model, Authentication auth) {
+        commonFunc(auth, model);
+        model.addAttribute("room", roomDto);
+        return "landlord/addroom";
     }
 
     @PostMapping("/add")
@@ -109,13 +116,6 @@ public class LandlordController {
         return "landlord/addroom2";
     }
 
-    @GetMapping("/add")
-    public String showAddRoomForm(@ModelAttribute RoomDto roomDto, Model model, Authentication auth) {
-        commonFunc(auth, model);
-        model.addAttribute("room", roomDto);
-        return "landlord/addroom";
-    }
-
     @GetMapping("/addFinish")
     public String showOption(HttpSession session, Authentication auth) {
         if (session.getAttribute("room") instanceof RoomDto) {
@@ -128,16 +128,13 @@ public class LandlordController {
         return "redirect:/landlord/add";
     }
 
-    @PostMapping("/update")
-    public String updateRoom(@ModelAttribute RoomDto roomDto, Model model, Authentication auth,
-                             @RequestParam(value = "images", required = false) List<MultipartFile> imagesAdd,
-                             @RequestParam(value = "imageIdsDel", required = false) List<Long> imageIdsDel) throws ExecutionException, InterruptedException {
+    @GetMapping("/upgradeRoom")
+    public String upgradeRoom(Authentication auth, Model model, @RequestParam(name = "roomID") Long roomId, HttpSession session) {
         commonFunc(auth, model);
-        roomService.updateRoom(roomDto,auth, imagesAdd, imageIdsDel);
-        roomService.updateRoom(roomDto,auth, imagesAdd, imageIdsDel);
-        return "redirect:/landlord/manage";
+        session.setAttribute("roomID", roomId);
+        session.setAttribute("username", auth.getName());
+        return "landlord/upgradeStatus";
     }
-
 
     @GetMapping("/update")
     public String showUpdateRoomForm(@ModelAttribute RoomDto roomDto, Model model, Authentication auth,
@@ -149,6 +146,16 @@ public class LandlordController {
         model.addAttribute("room", roomDto);
         return "landlord/updateroom";
     }
+
+    @PostMapping("/update")
+    public String updateRoom(@ModelAttribute RoomDto roomDto, Model model, Authentication auth,
+                             @RequestParam(value = "images", required = false) List<MultipartFile> imagesAdd,
+                             @RequestParam(value = "imageIdsDel", required = false) List<Long> imageIdsDel) throws ExecutionException, InterruptedException {
+        commonFunc(auth, model);
+        roomService.updateRoom(roomDto, imagesAdd, imageIdsDel);
+        return "redirect:/landlord/manage";
+    }
+
 
     private static void commonFunc(Authentication auth, Model model) {
         if (auth != null) {
@@ -162,40 +169,37 @@ public class LandlordController {
     @GetMapping("/appointment")
     public String showAppointment(Authentication auth, Model model,
                                   @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo,
-                                  @RequestParam(name = "isApproval", defaultValue = "ok") String isApproval) throws ParseException {
+                                  @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage) throws ParseException {
         commonFunc(auth, model);
-        Pageable pageable = PageRequest.of(pageNo - 1, sizeOfPage);
-        Page<Appointment> pages = null;
-        if (!isApproval.equals("ok")) {
-            pages = appointmentService.getAppointmentsByUsername(isApproval, auth.getName(), pageable);
-        } else {
-            pages = appointmentService.getAllAppointmentsByUsername(auth.getName(), pageable);
-        }
-        commonFunc(model, pageNo, pages);
-        model.addAttribute("isApproval", isApproval);
+        Pageable pageable = PageRequest.of(pageNo - 1, Integer.parseInt(sizeOfPage));
+        Page<Appointment> pages = appointmentService.getAllAppointmentsByUsername(auth.getName(), pageable);
+        commonFunc(model, sizeOfPage, pageNo, pages);
         return "landlord/viewingAppointment";
     }
 
     @GetMapping("/permitAppointment")
     public String showAppointment(@RequestParam(name="appointmentId") String appointmentId,
-                                  @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo) {
+                                  @RequestParam(name="pageNo", defaultValue = "1") Integer pageNo,
+                                  @RequestParam(name="pageSize", defaultValue = "10") Integer pageSize) {
         appointmentService.permitAppointment(Long.parseLong(appointmentId));
-        return "redirect:/landlord/appointment?isApproval=false&pageNo="+pageNo;
+        return "redirect:/landlord/appointment?pageNo="+pageNo+"&pageSize=" + pageSize;
     }
 
-    private void commonFunc(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Page<Appointment> pages) {
+    private void commonFunc(Model model,@RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Page<Appointment> pages) {
         List<Appointment> dtoList = new ArrayList<>();
         pages.forEach(dtoList::add);
         model.addAttribute("Appointments", AppointmentDto.toDto(dtoList));
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", sizeOfPage);
         model.addAttribute("totalPage", pages.getTotalPages() == 0 ? 1 : pages.getTotalPages());
     }
 
-    private static void commonFunc2(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Page<Room> pages) {
+    private static void commonFunc2(Model model, @RequestParam(name = "pageNo", defaultValue = "1") Integer pageNo, Page<Room> pages, @RequestParam(name = "pageSize", defaultValue = "10") String sizeOfPage) {
         List<Room> dtoList = new ArrayList<>();
         pages.forEach(dtoList::add);
         model.addAttribute("rooms", RoomDto.toDto(dtoList));
         model.addAttribute("currentPage", pageNo);
+        model.addAttribute("pageSize", sizeOfPage);
         model.addAttribute("totalPage", pages.getTotalPages() == 0 ? 1 : pages.getTotalPages());
     }
 }

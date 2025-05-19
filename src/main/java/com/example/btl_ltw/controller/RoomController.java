@@ -7,6 +7,7 @@ import com.example.btl_ltw.model.request.AppointmentRequest;
 import com.example.btl_ltw.model.dto.RoomDto;
 import com.example.btl_ltw.repository.ImageRepository;
 import com.example.btl_ltw.service.*;
+import com.example.btl_ltw.service.Impl.FavoriteRoomServiceImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -31,6 +32,9 @@ public class RoomController {
     private AppointmentService appointmentService;
 
     @Autowired
+    private FavoriteRoomServiceImpl favoriteRoomService;
+
+    @Autowired
     private RoomStarService roomStarService;
 
     @GetMapping
@@ -46,6 +50,7 @@ public class RoomController {
         model.addAttribute("images", imageDtos);
         model.addAttribute("error", error);
         model.addAttribute("commentId", commentId);
+        model.addAttribute("totalAddFavorite", favoriteRoomService.getTotalAddFavoriteByRoomId(Long.parseLong(room_id)));
 
         UserDto userDto = userService.getUserById(roomDto.getUser_id());
         model.addAttribute("userDto", userDto);

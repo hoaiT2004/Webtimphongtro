@@ -63,7 +63,6 @@
         }
 
         .content {
-            width: 95%;
             display: flex;
             justify-content: space-evenly;
             flex-wrap: wrap;
@@ -84,9 +83,55 @@
             padding: 10px;
         }
         .container {
-            width: 90%;
+            width: 80%;
             align-items: center;
             margin: 0 auto;
+        }
+        @media screen and (max-width: 873px) {
+            .menu {
+                flex-direction: column;
+            }
+
+            .container{
+                width: 95%;
+            }
+
+            .content {
+                display: block;
+            }
+
+            .right {
+                width: 100%;
+            }
+
+            .left {
+                width: 100%;
+            }
+
+            .toggle {
+                display: block !important;
+            }
+
+            nav {
+                display: none;
+            }
+
+            div.big-device {
+                display: none;
+            }
+
+            div.small-device {
+                display: flex !important;
+            }
+        }
+        .container {
+            width: 90%;
+            margin: 0 auto;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
         }
         .filter-item button {
             padding: 10px 20px;
@@ -342,12 +387,18 @@
         .stats-section {
             flex: 1;
             background: white;
-            padding: 10px;
+            padding: 20px;
             border-radius: 8px;
             box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
             text-align: center;
         }
 
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
         /* Nút chọn */
         .button-group {
             display: flex;
@@ -395,6 +446,10 @@
             text-decoration: none;
             border-radius: 5px;
             transition: 0.3s;
+        }
+        .filter-button:hover {
+            background: linear-gradient(135deg, #2575fc, #6a11cb);
+            transform: scale(1.05);
         }
 
         .pagination li a:hover {
@@ -475,14 +530,20 @@
                 </div>
 
                 <a th:href="@{/admin/printRevenue}">Xuất ra Excel</a>
+                <br>
+                <label for="pageSize">Hiển thị:</label>
+                <select id="pageSize" name="pageSize" onchange="filterByPageSize(this)">
+                    <option value="10" th:selected="${pageSize == '10'}">10 hàng</option>
+                    <option value="20" th:selected="${pageSize == '20'}">20 hàng</option>
+                    <option value="30" th:selected="${pageSize == '30'}">30 hàng</option>
+                </select>
                 <table>
                     <thead style="background-color: #1266dd">
                     <tr style="background-color: #1266dd">
-                        <th style="background-color: #1266dd;width: 700px">OrderID</th>
+                        <th style="background-color: #1266dd;width: 500px">OrderID</th>
                         <th style="background-color: #1266dd;width: 200px">Số tiền</th>
                         <th style="background-color: #1266dd;">Kiểu</th>
-                        <th style="background-color: #1266dd;width: 100px">Số lượng</th>
-                        <th style="background-color: #1266dd">Trạng thái</th>
+                        <th style="background-color: #1266dd;width: 80px">Số lượng</th>
                         <th style="background-color: #1266dd">Ngày giao dịch</th>
                         <th style="background-color: #1266dd;width: 300px">Tên</th>
                     </tr>
@@ -493,7 +554,6 @@
                         <td th:text="${revenue.getAmount() + ' VNĐ'}"></td>
                         <td th:text="${revenue.getType()}"></td>
                         <td th:text="${revenue.getQuantity()}"></td>
-                        <td th:text="${revenue.getStatus()}"></td>
                         <td th:text="${revenue.getCreatedAt()}"></td>
                         <td th:text="${revenue.getUsername()}"></td>
                     </tbody>
@@ -501,15 +561,15 @@
                 <div class="box-footer clearfix">
                     <ul class="pagination pagination-sm no-margin pull-right">
                         <li th:if="${currentPage > 1}">
-                            <a th:href="@{'/admin/RevenueManagement?pageNo=' + ${currentPage - 1}}"><<</a>
+                            <a th:href="@{'/admin/RevenueManagement?pageSize='+${pageSize} +'&pageNo=' + ${currentPage - 1}}"><<</a>
                         </li>
                         <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                                   th:classappend="${currentPage == i ? 'active' : ''}">
-                        <a th:href="@{'/admin/RevenueManagement?pageNo=' + ${i}}" th:text="${i}">
+                        <a th:href="@{'/admin/RevenueManagement?pageSize='+${pageSize} +'&pageNo=' + ${i}}" th:text="${i}">
                             </a>
                         </li>
                         <li th:if="${currentPage < totalPage}">
-                            <a th:href="@{'/admin/RevenueManagement?pageNo=' + ${currentPage + 1}}">>>
+                            <a th:href="@{'/admin/RevenueManagement?pageSize='+${pageSize} +'&pageNo=' + ${currentPage + 1}}">>>
                             </a>
                         </li>
                     </ul>
@@ -575,6 +635,14 @@
         roomChart.data.labels = labels[type];
         roomChart.data.datasets[0].data = newData;
         roomChart.update();
+    }
+</script>
+<script>
+    function filterByPageSize(selectElement) {
+        const selectedPageSize = selectElement.value;
+        const baseUrl = window.location.pathname; // giữ nguyên URL hiện tại
+        const url = `${baseUrl}?pageSize=${selectedPageSize}`;
+        window.location.href = url;
     }
 </script>
 </body>

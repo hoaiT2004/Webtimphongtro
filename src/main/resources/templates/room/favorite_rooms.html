@@ -10,12 +10,19 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
     <script src="https://code.jquery.com/jquery-3.7.0.js"
             integrity="sha256-JlqSTELeR4TLqP0OG9dxM7yDPqX1ox/HfgiSLBj8+kM=" crossorigin="anonymous"></script>
-</head>
-<head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản Lý Phòng - Admin</title>
+    <title>Quản lý phòng yêu thích</title>
     <style>
+        .content {
+            display: block;
+        }
+        .content {
+            display: flex;
+            justify-content: space-evenly;
+            flex-wrap: wrap;
+        }
+
         * {
             margin: 0px;
             padding: 0px;
@@ -32,11 +39,6 @@
             text-decoration: none !important;
         }
 
-        .subject {
-            text-align: center;
-            text-transform: uppercase;
-        }
-
         .left {
             background-color: white;
             border: 1px solid;
@@ -51,22 +53,10 @@
             width: 28%;
             height: 100%;
         }
-
-        .bg-white{
-            background-color: white;
-        }
-
         .right-no-border {
             width: 28%;
             height: 100%;
         }
-
-        .content {
-            display: flex;
-            justify-content: space-evenly;
-            flex-wrap: wrap;
-        }
-
 
         .flex {
             display: flex;
@@ -80,11 +70,7 @@
             padding: 10px;
         }
 
-        .container {
-            width: 80%;
-            align-items: center;
-            margin: 0 auto;
-        }
+
         .filter-item button {
             padding: 10px 20px;
             background-color: #003c9d; /* Màu nền xanh dương đậm */
@@ -105,7 +91,7 @@
             align-items: center;
         }
         .border {
-            border: 0.5px solid gray;
+            border: 0.5px solid;
             border-radius: 7px;
         }
         nav {
@@ -164,14 +150,6 @@
             }
         }
 
-        .v-menu {
-            flex-direction: column;
-            overflow: hidden;
-            list-style-type: none;
-            padding: 0;
-            margin: 0;
-
-        }
 
         .v-menu>li {
             width: 90%;
@@ -214,11 +192,7 @@
             margin: 0;
             padding: 0;
         }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-        }
+
         .back-button i {
             margin-right: 8px;
             font-size: 2em;
@@ -282,7 +256,91 @@
         .pagination button:hover {
             background-color: #003c9d;
         }
+        @media screen and (max-width: 873px) {
+            .menu {
+                flex-direction: column;
+            }
 
+            .container{
+                width: 95%;
+            }
+
+            .right {
+                width: 100%;
+            }
+
+            .left {
+                width: 100%;
+            }
+
+            .toggle {
+                display: block !important;
+            }
+
+            nav {
+                display: none;
+            }
+
+            div.big-device {
+                display: none;
+            }
+
+            div.small-device {
+                display: flex !important;
+            }
+        }
+
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+
+        .transaction-history {
+            max-width: 1000px;
+            margin: 30px auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+
+        .transaction-history h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .transaction-table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction-table th, .transaction-table td {
+            padding: 12px 16px;
+            text-align: center;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .transaction-table thead {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .transaction-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        .status.success {
+            background-color: #28a745;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
@@ -334,7 +392,7 @@
 <div class="container" >
     <section>
         <div style="margin-top: 10px;" class="content">
-            <div class="left border">
+            <div class="transaction-history">
                 <h3 style="text-align: center">Danh sách phòng yêu thích</h3>
                 <div class="filter-container container" style="border-color: white">
                     <form th:action="@{/room/favorites}" method="GET" class="flex" style="justify-content: space-evenly; margin-top: 20px; margin-bottom: 20px;">
@@ -406,7 +464,14 @@
                         </div>
                     </form>
                 </div>
-                <table>
+                <label for="pageSize">Hiển thị:</label>
+                <select id="pageSize" name="pageSize" onchange="filterByPageSize(this)">
+                    <option value="10" th:selected="${pageSize == '10'}">10 hàng</option>
+                    <option value="20" th:selected="${pageSize == '20'}">20 hàng</option>
+                    <option value="30" th:selected="${pageSize == '30'}">30 hàng</option>
+                </select>
+                <div class="table-responsive">
+                <table  class="transaction-table">
                     <thead>
                     <tr>
                         <th style="background-color: #1266dd;" >ID</th>
@@ -442,40 +507,40 @@
                     </tr>
                     </tbody>
                 </table>
+            </div>
                 <div class="box-footer clearfix">
                     <ul class="pagination pagination-sm no-margin pull-right">
                         <li th:if="${currentPage > 1}">
-                            <a th:href="@{'/room/favorites?pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
+                            <a th:href="@{'/room/favorites?pageSize='+${pageSize} +'&pageNo=' + ${currentPage - 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}"><<</a>
                         </li>
                         <li th:each="i : ${#numbers.sequence(1, totalPage)}"
                                   th:classappend="${currentPage == i ? 'active' : ''}">
-                        <a th:href="@{'/room/favorites?pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
+                        <a th:href="@{'/room/favorites?pageSize='+${pageSize} +'&pageNo=' + ${i} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}" th:text="${i}">
                             </a>
                         </li>
                         <li th:if="${currentPage < totalPage}">
-                            <a th:href="@{'/room/favorites?pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
+                            <a th:href="@{'/room/favorites?pageSize='+${pageSize} +'&pageNo=' + ${currentPage + 1} + '&price=' + ${request.price} + '&address=' + ${request.address} + '&area=' + ${request.area} + '&roomType=' + ${request.roomType}}">>>
                             </a>
                         </li>
                     </ul>
-
-
             </div>
-            </div>
-
-            <div class="right border bg-white">
-                <h3 class="subject">Tin mới đăng</h3>
-                <ul class="flex v-menu">
-                    <li><a href="/api/home/news_1">Những lưu ý khi thuê trọ</a></li>
-                    <li><a href="/api/home/news_2">Vấn nạn an toàn PCCC tại các nhà trọ</a></li>
-                    <li><a href="/api/home/nenthuenhaodau">Nên thuê nhà ở đâu</a></li>
-                    <li><a href="/api/home/nhadephon">Làm sao để nhà đẹp hơn</a></li>
-                </ul>
             </div>
             <div class="right-no-border"></div>
             <div class="right-no-border"></div>
         </div>
     </section>
 </div>
-
+<script>
+    function filterByPageSize(selectElement) {
+        const selectedPageSize = selectElement.value;
+        const price = '[[${request.price}]]';
+        const address = '[[${request.address}]]';
+        const area = '[[${request.area}]]';
+        const roomType = '[[${request.roomType}]]';
+        const baseUrl = window.location.pathname; // giữ nguyên URL hiện tại
+        const url = `${baseUrl}?pageSize=${selectedPageSize}&price=${price}&address=${address}&area=${area}&roomType=${roomType}`;
+        window.location.href = url;
+    }
+</script>
 </body>
 </html>

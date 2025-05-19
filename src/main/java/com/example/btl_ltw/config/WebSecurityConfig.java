@@ -57,7 +57,7 @@ public class WebSecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers( "/v3/api-docs/**",
                         "/swagger-ui/**",
-                        "/swagger-ui.html","/api/payment/payment-return", "https://982b-103-238-68-84.ngrok-free.app/api/payment/payment-return","/api/home/*", "/api/home", "/user/sendEmailAgain","/user/register","/user/login","/user/retrievePassword", "/api/room", "/user/createNewPassword")
+                        "/swagger-ui.html","/api/payment/payment-return", "/api/payment/payment-return2","/api/home/*", "/api/home", "/user/sendEmailAgain","/user/register","/user/login","/user/retrievePassword", "/api/room", "/user/createNewPassword")
                 .permitAll()
                 .requestMatchers(PathRequest.toStaticResources().atCommonLocations())
                 .permitAll()
