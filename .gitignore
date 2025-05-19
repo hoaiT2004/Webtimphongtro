@@ -1,0 +1,40 @@
+# Bỏ qua thư mục build
+/target/
+
+# Bỏ qua file log
+*.log
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.iws
+out/
+
+# VS Code
+.vscode/
+
+# MacOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# Eclipse
+.classpath
+.project
+.settings/
+
+# File môi trường
+.env
+*.env
+
+# File tạm của hệ thống hoặc IDE
+*.swp
+*.swo
+*.bak
+
+# Maven Wrapper
+.mvn/
+!/.mvn/wrapper/maven-wrapper.jar
+mvnw
+mvnw.cmd
